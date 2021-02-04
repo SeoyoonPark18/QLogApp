@@ -7,7 +7,7 @@
     tools:context=".ui.calendar.CalendarFragment">
 
     <LinearLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/Header_Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -16,21 +16,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/calendar_prev_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_24" />
-
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24" />
         <LinearLayout
             android:id="@+id/date_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/calendar_prev_button"
-            android:layout_toRightOf="@id/calendar_prev_button"
             android:gravity="center"
             android:orientation="horizontal">
             <!-- date title -->
@@ -69,16 +66,14 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/calendar_next_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_toEndOf="@+id/date_display"
-            android:layout_toRightOf="@+id/date_display"
-            app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
     </LinearLayout>
 
     <!-- days header -->
@@ -88,7 +83,7 @@
         android:layout_height="30dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/Header_Layout">
 
         <TextView
             android:layout_width="0dp"
