@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.Answeractivity
+import com.example.main.NextCalActivity
 import com.example.main.R
 
 class CalendarFragment : Fragment() {
@@ -31,9 +32,9 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        expansionButton = view.findViewById(R.id.writeButton)
+        expansionButton = view.findViewById(R.id.expansionButton)
         expansionButton.setOnClickListener{
-            val intent = Intent(getActivity(), Answeractivity::class.java)
+            val intent = Intent(getActivity(), NextCalActivity::class.java)
             startActivity(intent)
         }
     }
