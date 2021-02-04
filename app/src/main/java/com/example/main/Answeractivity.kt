@@ -11,7 +11,6 @@ class Answeractivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
-        //efefefefe
-
     }
+    //주석보이시나요
 }
