@@ -5,18 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.Answeractivity
 import com.example.main.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.widget.Toast.makeText as toastMakeText
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+
     lateinit var writeButton : FloatingActionButton
+    lateinit var refreshButton : FloatingActionButton
+    lateinit var fixQButton : FloatingActionButton
+    lateinit var shareButton : FloatingActionButton
+    lateinit var question : EditText
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -26,10 +34,7 @@ class HomeFragment : Fragment() {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
         return root
 
 
@@ -37,11 +42,30 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         writeButton = view.findViewById(R.id.writeButton)
+        refreshButton = view.findViewById(R.id.refreshButton)
+        fixQButton = view.findViewById(R.id.fixQButton)
+        shareButton = view.findViewById(R.id.shareButton)
+        question = view.findViewById(R.id.questionText)
+        question.isEnabled = false
+
+        var intent = Intent(getActivity(), Answeractivity::class.java)
+
+
         writeButton.setOnClickListener{
-            val intent = Intent(getActivity(), Answeractivity::class.java)
+            intent.putExtra("question", question.getText().toString())
             startActivity(intent)
+            var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
         }
+        fixQButton.setOnClickListener{
+            question.isEnabled = true
+            var fB = Toast.makeText(view.context, "질문 수정",Toast.LENGTH_SHORT).show()
+
+
+
+        }
+
     }
 
 }

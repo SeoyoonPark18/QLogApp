@@ -6,35 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <EditText
+        android:id="@+id/questionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:padding="50dp"
-        android:text="Q. 당신의 하루는?"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="당신은 행복한가요?"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment" />
+        app:layout_constraintTop_toBottomOf="@+id/TodayQ" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home">
+        app:layout_constraintTop_toBottomOf="@+id/questionText">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/writeButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/fixQButton"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttonshape"
-            android:radius="100dp"
+            android:clickable="true"
             android:src="@android:drawable/ic_menu_edit"
-            android:tint="#000000"
             app:backgroundTint="#00FFFFFF"
-            app:rippleColor="#FFFFFF" />
+            app:elevation="0dp"
+            app:rippleColor="#00FFFFFF"
+            app:useCompatPadding="false" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/refreshButton"
@@ -42,15 +48,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@android:drawable/ic_popup_sync"
-            app:backgroundTint="#00FFFFFF" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/saveButton"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@android:drawable/ic_input_add"
-            app:backgroundTint="#00FFFFFF" />
+            app:backgroundTint="#00FFFFFF"
+            app:elevation="0dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareButton"
@@ -58,8 +57,44 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="?attr/actionModeShareDrawable"
-            app:backgroundTint="#00FFFFFF" />
+            app:backgroundTint="#00FFFFFF"
+            app:elevation="0dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/writeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonshape"
+            android:radius="100dp"
+            android:src="@android:drawable/ic_menu_send"
+            android:tint="#000000"
+            app:backgroundTint="#00FFFFFF"
+            app:elevation="0dp"
+            app:rippleColor="#FFFFFF" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/TodayQ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="오늘의 질문"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="31dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:scaleX="7"
+        android:src="@drawable/ic_baseline_horizontal_rule_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TodayQ" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
