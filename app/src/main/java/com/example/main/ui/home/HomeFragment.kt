@@ -63,7 +63,14 @@ class HomeFragment : Fragment() {
             var fB = Toast.makeText(view.context, "질문 수정",Toast.LENGTH_SHORT).show()
 
 
-
+        }
+        shareButton.setOnClickListener{
+            var sB = Toast.makeText(view.context, "공유하기",Toast.LENGTH_SHORT).show()
+            var share_intent = Intent(Intent.ACTION_SEND)
+            share_intent.type = "text/plain"
+            share_intent.putExtra(Intent.EXTRA_TEXT, question.getText().toString())
+            val chooser = Intent.createChooser(share_intent, "공유하기")
+            startActivity(chooser)
         }
 
     }
