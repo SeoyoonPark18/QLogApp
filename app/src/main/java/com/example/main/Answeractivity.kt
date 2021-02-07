@@ -12,5 +12,5 @@ class Answeractivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
     }
-    //주석보이시나요?
+    //주석보이시나요
 }
