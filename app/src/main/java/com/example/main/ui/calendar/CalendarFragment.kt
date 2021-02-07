@@ -20,7 +20,7 @@ class CalendarFragment : Fragment() {
     private lateinit var calendarViewModel: CalendarViewModel
     lateinit var expansionButton: ImageButton
     lateinit var scrollText: ScrollView
-    lateinit var calendarView: CalendarView
+    //lateinit var calendarView: CalendarView
     lateinit var dateView: TextView
 
     override fun onCreateView(
@@ -38,7 +38,7 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         expansionButton = view.findViewById(R.id.expansionButton)
         scrollText = view.findViewById(R.id.scrollText)
-        calendarView = view.findViewById(R.id.calendarView)
+        //calendarView = view.findViewById(R.id.calendarView)
         dateView = view.findViewById(R.id.dateView)
 
         dateView.text = String.format("%d년 %d월 %d일", Calendar.YEAR+2020, Calendar.MONTH, Calendar.DATE+2)
@@ -49,10 +49,10 @@ class CalendarFragment : Fragment() {
             startActivity(intent)
         }
 
-        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        /*calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             dateView.visibility = View.VISIBLE
             dateView.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
             //데이터 베이스
-        }
+        }*/
     }
 }
