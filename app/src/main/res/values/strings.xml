@@ -12,4 +12,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="group">그룹 관리</string>
+    <string name="group_add">친구 추가</string>
+    <string name="group_del">친구 삭제</string>
+    <string name="friend_add">친구 추가</string>
+    <string name="friend_del">친구 삭제</string>
 </resources>

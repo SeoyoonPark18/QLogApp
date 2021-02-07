@@ -15,11 +15,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:focusedMonthDateColor="@color/blue"
-        android:soundEffectsEnabled="false"
-        android:splitMotionEvents="false"
-        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:weekNumberColor="@color/blue" />
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <LinearLayout
         android:layout_width="match_parent"
