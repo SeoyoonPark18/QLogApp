@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/personnel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <item
+        android:id="@+id/group"
+        android:title="@string/group">
+        <menu>
+            <item
+                android:id="@+id/group_add"
+                android:title="@string/group_add" />
+            <item
+                android:id="@+id/group_del"
+                android:title="@string/group_del" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/friend_add"
+        android:title="@string/friend_add" />
+    <item
+        android:id="@+id/friend_del"
+        android:title="@string/friend_del" />
+</menu>

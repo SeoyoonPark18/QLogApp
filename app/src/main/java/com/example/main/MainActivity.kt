@@ -2,14 +2,13 @@ package com.example.main
 
 
 import android.os.Bundle
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+// 주석
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,11 +28,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_settings
             )
         )
-        //액션바 없앰
-        var actionBar : ActionBar
-        actionBar = supportActionBar!!
-        actionBar?.hide()
-
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
