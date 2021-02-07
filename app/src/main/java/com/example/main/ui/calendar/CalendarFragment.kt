@@ -20,6 +20,7 @@ class CalendarFragment : Fragment() {
     private lateinit var calendarViewModel: CalendarViewModel
     lateinit var expansionButton: ImageButton
     lateinit var scrollText: ScrollView
+    lateinit var YearMonth: TextView
     //lateinit var calendarView: CalendarView
     lateinit var dateView: TextView
 
@@ -38,9 +39,11 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         expansionButton = view.findViewById(R.id.expansionButton)
         scrollText = view.findViewById(R.id.scrollText)
+        YearMonth = view.findViewById(R.id.YearMonth)
         //calendarView = view.findViewById(R.id.calendarView)
         dateView = view.findViewById(R.id.dateView)
 
+        YearMonth.text = String.format("%d년 %d월", Calendar.YEAR+2020, Calendar.MONTH)
         dateView.text = String.format("%d년 %d월 %d일", Calendar.YEAR+2020, Calendar.MONTH, Calendar.DATE+2)
 
         expansionButton.setOnClickListener{
