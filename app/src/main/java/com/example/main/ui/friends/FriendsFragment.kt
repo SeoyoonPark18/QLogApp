@@ -1,16 +1,15 @@
 package com.example.main.ui.friends
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +21,7 @@ import com.example.main.R
 class FriendsFragment : Fragment() {
 
     private lateinit var friendsViewModel: FriendsViewModel
+    lateinit var layout: LinearLayout
 
     lateinit var friend_id: EditText
 
@@ -40,12 +40,9 @@ class FriendsFragment : Fragment() {
                 ViewModelProvider(this).get(FriendsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_friends, container, false)
         val sub = inflater.inflate(R.layout.dialog, container, false)
-        val textView: TextView = root.findViewById(R.id.text_friends)
-        friendsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
         setHasOptionsMenu(true)
         //friend_id =sub.findViewById(R.id.friend_id)
+        layout = root.findViewById(R.id.friend)
         friend_id = sub.findViewById(R.id.friend_id)
         return root
     }
@@ -77,7 +74,55 @@ class FriendsFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun check_id() {
+    @SuppressLint("ResourceAsColor")
+    fun check_id_add() {
+        dbManager = DBManager(activity, "registerDB", null, 1)
+
+        sqlitedb = dbManager.readableDatabase
+
+        var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+
+        var idData: String = ""
+        var nameData: String = ""
+
+        while (cursor.moveToNext()) {
+
+            idData = cursor.getString(1)
+            id = friend_id.text.toString()
+
+            if(id == idData) {
+                Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
+                var num: Int = 0
+                while (cursor.moveToNext()) {
+                    nameData = cursor.getString(0)
+
+                    var layout_item: LinearLayout = LinearLayout(activity)
+                    layout_item.orientation = LinearLayout.VERTICAL
+                    layout_item.id = num
+
+                    var tvName: TextView = TextView(activity)
+                    tvName.text = nameData
+                    tvName.textSize = 30f
+                    //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
+                    tvName.setTextColor(Color.BLACK)
+                    layout_item.addView(tvName)
+                    layout.addView(layout_item)
+                    num++
+                }
+                cursor.close()
+                sqlitedb.close()
+                dbManager.close()
+            }
+            else {
+                Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        cursor.close()
+        sqlitedb.close()
+    }
+
+    fun check_id_del() {
         dbManager = DBManager(activity, "registerDB", null, 1)
 
         sqlitedb = dbManager.readableDatabase
@@ -95,7 +140,7 @@ class FriendsFragment : Fragment() {
             id = "suuu"
 
             if(id == idData) {
-                Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }
             else if(id != idData) {
                 Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
@@ -109,7 +154,7 @@ class FriendsFragment : Fragment() {
         override fun onClick(dialog: DialogInterface?, which: Int) {
                 when(which){
                 DialogInterface.BUTTON_POSITIVE ->
-                    check_id()
+                    check_id_add()
                     //Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -119,7 +164,8 @@ class FriendsFragment : Fragment() {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             when(which){
                 DialogInterface.BUTTON_POSITIVE ->
-                    Toast.makeText(activity, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    check_id_del()
+                    //Toast.makeText(activity, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }
