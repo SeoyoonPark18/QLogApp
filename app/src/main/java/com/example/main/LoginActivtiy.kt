@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 
 class LoginActivtiy : AppCompatActivity() {
@@ -53,6 +54,7 @@ class LoginActivtiy : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
+
             }
 
             cursor.close()

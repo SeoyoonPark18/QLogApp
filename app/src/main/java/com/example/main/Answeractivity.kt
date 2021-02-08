@@ -10,15 +10,23 @@ import androidx.appcompat.app.ActionBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import com.example.main.ui.home.HomeFragment
+import com.google.android.material.internal.ContextUtils.getActivity
 
-class Answeractivity : AppCompatActivity() {
+class Answeractivity : AppCompatActivity()
+{
     lateinit var ques : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
         ques = findViewById(R.id.ques)
-        val intent = getIntent()
+        val intent = intent
+
+        val year = intent.getStringExtra("year")
+        val month = intent.getStringExtra("month")
+        val day = intent.getStringExtra("day")
+        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
 
         if(intent.hasExtra("question")){
             ques.text= intent.getStringExtra("question")

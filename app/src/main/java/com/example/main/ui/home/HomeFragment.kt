@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +41,6 @@ class HomeFragment : Fragment() {
 
         return root
 
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,16 +54,23 @@ class HomeFragment : Fragment() {
         date = view.findViewById(R.id.date)
         question.isEnabled = false
 
+        // 상단바 이름 변경
+        (activity as AppCompatActivity).supportActionBar?.title = "홈"
+
+
         var intent = Intent(getActivity(), Answeractivity::class.java)
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR).toString()
         val month = (cal.get(Calendar.MONTH)+1).toString()
         val day = cal.get(Calendar.DATE).toString()
-        date.setText("$year-$month-$day")
-
+        date.setText("$year" +"/" + "$month" + "/"+ "$day")
 
         writeButton.setOnClickListener{
             intent.putExtra("question", question.getText().toString())
+           // intent.putExtra("cal", cal)
+            intent.putExtra("year", year)
+            intent.putExtra("month", month)
+            intent.putExtra("day", day)
             startActivity(intent)
             var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
         }
