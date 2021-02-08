@@ -19,7 +19,7 @@ class NextCalActivity : AppCompatActivity() {
         deleteButton = findViewById(R.id.deleteButton)
         dateTextView = findViewById(R.id.dateText)
 
-        dateTextView.text = intent.getStringExtra("KEY_DATE").toString()
+        dateTextView.text = intent.getStringExtra("KEY_DATE")
 
         closeButton.setOnClickListener {
             onBackPressed()

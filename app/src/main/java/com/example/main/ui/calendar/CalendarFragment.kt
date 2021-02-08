@@ -1,6 +1,7 @@
 package com.example.main.ui.calendar
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,15 @@ import android.widget.CalendarView
 import android.widget.ImageButton
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.NextCalActivity
 import com.example.main.R
+import java.time.LocalDate
+import java.time.Month
+import java.time.Year
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -34,6 +40,7 @@ class CalendarFragment : Fragment() {
         return root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         expansionButton = view.findViewById(R.id.expansionButton)
@@ -41,18 +48,23 @@ class CalendarFragment : Fragment() {
         calendarView = view.findViewById(R.id.calendarView)
         dateView = view.findViewById(R.id.dateView)
 
-        dateView.text = String.format("%d년 %d월 %d일", Calendar.YEAR+2020, Calendar.MONTH, Calendar.DATE+2)
+        dateView.text = LocalDate.now().year.toString() + "년 " +
+                LocalDate.now().month.value.toString().toInt() + "월 " +
+                LocalDate.now().dayOfMonth + "일"
 
         expansionButton.setOnClickListener{
             val intent = Intent(getActivity(), NextCalActivity::class.java)
-            intent.putExtra("KEY_DATE", dateView.text)
+            intent.putExtra("KEY_DATE", dateView.text.toString())
             startActivity(intent)
         }
 
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            var m: Int
+            m = month + 1
             dateView.visibility = View.VISIBLE
-            dateView.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
+            dateView.text = year.toString() +"년 " + m.toString() + "월 " + dayOfMonth + "일"
             //데이터 베이스 추가
         }
     }
+
 }

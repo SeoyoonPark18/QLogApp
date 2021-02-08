@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 
 class LoginActivtiy : AppCompatActivity() {
@@ -42,16 +43,18 @@ class LoginActivtiy : AppCompatActivity() {
             var idData = ""
             var pwData = ""
 
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
                 pwData = cursor.getString(2)
 
                 id = edtLoginId.text.toString()
                 pw = edtLoginPw.text.toString()
 
-                if(id==idData && pw==pwData){
+                if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                } else {
+                    Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -63,6 +66,5 @@ class LoginActivtiy : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
     }
 }
