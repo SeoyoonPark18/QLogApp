@@ -16,10 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.main.NextCalActivity
 import com.example.main.R
 import java.time.LocalDate
-import java.time.Month
-import java.time.Year
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class CalendarFragment : Fragment() {
 
@@ -48,9 +44,9 @@ class CalendarFragment : Fragment() {
         calendarView = view.findViewById(R.id.calendarView)
         dateView = view.findViewById(R.id.dateView)
 
-        dateView.text = LocalDate.now().year.toString() + "년 " +
+        dateView.setText(LocalDate.now().year.toString() + "년 " +
                 LocalDate.now().month.value.toString().toInt() + "월 " +
-                LocalDate.now().dayOfMonth + "일"
+                LocalDate.now().dayOfMonth + "일")
 
         expansionButton.setOnClickListener{
             val intent = Intent(getActivity(), NextCalActivity::class.java)
@@ -62,7 +58,7 @@ class CalendarFragment : Fragment() {
             var m: Int
             m = month + 1
             dateView.visibility = View.VISIBLE
-            dateView.text = year.toString() +"년 " + m.toString() + "월 " + dayOfMonth + "일"
+            dateView.setText(year.toString() +"년 " + m.toString() + "월 " + dayOfMonth + "일")
             //데이터 베이스 추가
         }
     }
