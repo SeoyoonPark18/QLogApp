@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 
 
 class LoginActivtiy : AppCompatActivity() {
@@ -16,6 +17,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var edtLoginPw: EditText
     lateinit var btnLogin: Button
     lateinit var btnToRegister: Button
+
+    lateinit var actionBar: ActionBar
 
     lateinit var id: String
     lateinit var pw: String
@@ -26,6 +29,9 @@ class LoginActivtiy : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        actionBar = supportActionBar!!
+        actionBar.hide()
 
         edtLoginId = findViewById(R.id.edtLoginId)
         edtLoginPw = findViewById(R.id.edtLoginPw)
