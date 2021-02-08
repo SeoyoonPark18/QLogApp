@@ -45,8 +45,8 @@ class FriendsFragment : Fragment() {
             textView.text = it
         })
         setHasOptionsMenu(true)
-        friend_id =sub.findViewById(R.id.friend_id)
-        dbManager = DBManager(activity, "registerDB", null, 1)
+        //friend_id =sub.findViewById(R.id.friend_id)
+        friend_id = sub.findViewById(R.id.friend_id)
         return root
     }
 
@@ -77,31 +77,41 @@ class FriendsFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun check_id() {
+        dbManager = DBManager(activity, "registerDB", null, 1)
+
+        sqlitedb = dbManager.readableDatabase
+
+        var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+
+        var idData: String = ""
+        var nameData: String = ""
+
+        while (cursor.moveToNext()) {
+            idData = cursor.getString(1)
+            nameData = cursor.getString(0)
+
+            id = "suuu"
+
+            if(id == idData) {
+                Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            else if(id != idData) {
+                Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        cursor.close()
+        sqlitedb.close()
+    }
+
     var dialog_listener_add = object: DialogInterface.OnClickListener{
         override fun onClick(dialog: DialogInterface?, which: Int) {
-            sqlitedb = dbManager.readableDatabase
-
-            var cursor: Cursor
-            cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
-
-            var idData: String = ""
-            var nameData: String = ""
-
-            while (cursor.moveToNext()){
-                idData = cursor.getString(1)
-                nameData = cursor.getString(0)
-
-                id = friend_id.text.toString()
-
-                if(id == idData) {
-                    Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-                else if(id != idData) {
-                    Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
-                }
+                when(which){
+                DialogInterface.BUTTON_POSITIVE ->
+                    check_id()
+                    //Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
             }
-            cursor.close()
-            sqlitedb.close()
         }
     }
 
