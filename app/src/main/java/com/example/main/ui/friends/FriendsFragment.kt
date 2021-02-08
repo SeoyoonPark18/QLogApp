@@ -12,10 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.main.DBManager
-import com.example.main.Friend_Activity
-import com.example.main.MainActivity
-import com.example.main.R
+import com.example.main.*
 
 
 class FriendsFragment : Fragment() {
@@ -41,10 +38,8 @@ class FriendsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_friends, container, false)
         val sub = inflater.inflate(R.layout.dialog, container, false)
         setHasOptionsMenu(true)
-        //friend_id =sub.findViewById(R.id.friend_id)
+        friend_id =sub.findViewById(R.id.friend_id)
         layout = root.findViewById(R.id.friend)
-        friend_id = sub.findViewById(R.id.friend_id)
-
         show_friend()
         return root
     }
@@ -90,33 +85,15 @@ class FriendsFragment : Fragment() {
 
         while (cursor.moveToNext()) {
             idData = cursor.getString(1)
-            id = "su"
-
-            var posituion = cursor.getColumnIndex(nameData)
+            id= friend_id.text.toString()
 
             if(id == idData) {
+                dbManager = DBManager(activity, "friendDB", null, 1)
+                sqlitedb = dbManager.writableDatabase
+                sqlitedb.execSQL("INSERT INTO register VALUES (id)")
+                sqlitedb.close()
                 show_friend()
                 Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
-                var num: Int = 0
-                while (cursor.moveToNext()) {
-                    nameData = cursor.getString(0)
-
-                    var layout_item: LinearLayout = LinearLayout(activity)
-                    layout_item.orientation = LinearLayout.VERTICAL
-                    layout_item.id = num
-
-                    var tvName: TextView = TextView(activity)
-                    tvName.text = nameData
-                    tvName.textSize = 30f
-                    //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
-                    tvName.setTextColor(Color.BLACK)
-                    layout_item.addView(tvName)
-                    layout.addView(layout_item)
-                    num++
-                }
-                cursor.close()
-                sqlitedb.close()
-                dbManager.close()
             }
             else {
                 Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
@@ -145,7 +122,7 @@ class FriendsFragment : Fragment() {
 
             var tvName: TextView = TextView(activity)
             tvName.text = nameData
-            tvName.textSize = 30f
+            tvName.textSize = 25f
             //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
             tvName.setTextColor(Color.BLACK)
             layout_item.addView(tvName)
