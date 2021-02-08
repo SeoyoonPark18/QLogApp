@@ -1,6 +1,9 @@
 package com.example.main
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
@@ -26,9 +29,11 @@ class Answeractivity : AppCompatActivity() {
             ques.text = "Q. 당신은 행복한가요? " // default
         }
 
-
-
-
-
     }
-}
+   // override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+  //      super.onCreateOptionsMenu(menu, inflater)
+      //  inflater.inflate(R.menu.private_menu, menu)
+    }
+
+
+
