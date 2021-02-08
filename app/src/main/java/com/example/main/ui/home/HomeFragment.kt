@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.main.Answeractivity
 import com.example.main.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
+import java.util.*
 import android.widget.Toast.makeText as toastMakeText
 
 class HomeFragment : Fragment() {
@@ -25,6 +27,7 @@ class HomeFragment : Fragment() {
     lateinit var fixQButton : FloatingActionButton
     lateinit var shareButton : FloatingActionButton
     lateinit var question : EditText
+    lateinit var date : TextView
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -48,9 +51,15 @@ class HomeFragment : Fragment() {
         fixQButton = view.findViewById(R.id.fixQButton)
         shareButton = view.findViewById(R.id.shareButton)
         question = view.findViewById(R.id.questionText)
+        date = view.findViewById(R.id.date)
         question.isEnabled = false
 
         var intent = Intent(getActivity(), Answeractivity::class.java)
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR).toString()
+        val month = (cal.get(Calendar.MONTH)+1).toString()
+        val day = cal.get(Calendar.DATE).toString()
+        date.setText("$year-$month-$day")
 
 
         writeButton.setOnClickListener{

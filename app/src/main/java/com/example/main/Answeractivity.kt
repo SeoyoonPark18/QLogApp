@@ -36,14 +36,13 @@ class Answeractivity : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
-            R.id.ans_public -> {
-                // 친구에게 공개
+            R.id.ans_private -> {
+                // 해당 답변 잠금
                 true
             }
-            R.id.ans_private -> {
-                // 친구에게 비공개
+            R.id.ans_public -> {
+                // 해당 답변 오픈
                 true
             }
             else -> super.onOptionsItemSelected(item)
