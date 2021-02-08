@@ -45,42 +45,7 @@ class FriendsFragment : Fragment() {
         layout = root.findViewById(R.id.friend)
         friend_id = sub.findViewById(R.id.friend_id)
 
-        dbManager = DBManager(activity, "registerDB", null, 1)
-        sqlitedb = dbManager.readableDatabase
-
-        var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
-
-        var num: Int = 0
-
-                while (cursor.moveToNext()) {
-
-                    var nameData = cursor.getString(0)
-
-                    var layout_item: LinearLayout = LinearLayout(activity)
-                    layout_item.orientation = LinearLayout.VERTICAL
-                    layout_item.id = num
-
-                    var tvName: TextView = TextView(activity)
-                    tvName.text = nameData
-                    tvName.textSize = 30f
-                    //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
-                    tvName.setTextColor(Color.BLACK)
-                    layout_item.addView(tvName)
-
-                    layout_item.setOnClickListener {
-                        val intent = Intent(getActivity(), Friend_Activity::class.java)
-                        //intent.putExtra("intent_name", nameData)
-                        startActivity(intent)
-                    }
-
-                    layout.addView(layout_item)
-                    num++
-                }
-                cursor.close()
-                sqlitedb.close()
-                dbManager.close()
-
+        show_friend()
         return root
     }
 
@@ -113,7 +78,90 @@ class FriendsFragment : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     fun check_id_add() {
+        dbManager = DBManager(activity, "registerDB", null, 1)
 
+        sqlitedb = dbManager.readableDatabase
+
+        var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+
+        var idData: String = ""
+        var nameData: String = ""
+
+        while (cursor.moveToNext()) {
+            idData = cursor.getString(1)
+            id = "su"
+
+            var posituion = cursor.getColumnIndex(nameData)
+
+            if(id == idData) {
+                show_friend()
+                Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
+                var num: Int = 0
+                while (cursor.moveToNext()) {
+                    nameData = cursor.getString(0)
+
+                    var layout_item: LinearLayout = LinearLayout(activity)
+                    layout_item.orientation = LinearLayout.VERTICAL
+                    layout_item.id = num
+
+                    var tvName: TextView = TextView(activity)
+                    tvName.text = nameData
+                    tvName.textSize = 30f
+                    //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
+                    tvName.setTextColor(Color.BLACK)
+                    layout_item.addView(tvName)
+                    layout.addView(layout_item)
+                    num++
+                }
+                cursor.close()
+                sqlitedb.close()
+                dbManager.close()
+            }
+            else {
+                Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        cursor.close()
+        sqlitedb.close()
+}
+
+    fun show_friend() {
+        dbManager = DBManager(activity, "friendDB", null, 1)
+        sqlitedb = dbManager.readableDatabase
+
+        var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+
+        var num: Int = 0
+
+        while (cursor.moveToNext()) {
+
+            var nameData = cursor.getString(0)
+
+            var layout_item: LinearLayout = LinearLayout(activity)
+            layout_item.orientation = LinearLayout.VERTICAL
+            layout_item.id = num
+
+            var tvName: TextView = TextView(activity)
+            tvName.text = nameData
+            tvName.textSize = 30f
+            //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
+            tvName.setTextColor(Color.BLACK)
+            layout_item.addView(tvName)
+
+            layout_item.setOnClickListener {
+                val intent = Intent(getActivity(), Friend_Activity::class.java)
+                //intent.putExtra("intent_name", nameData)
+                startActivity(intent)
+            }
+
+            layout.addView(layout_item)
+            num++
+        }
+        cursor.close()
+        sqlitedb.close()
+        dbManager.close()
 
     }
 
@@ -150,6 +198,7 @@ class FriendsFragment : Fragment() {
             when(which){
                 DialogInterface.BUTTON_POSITIVE ->
                     check_id_add()
+
                 //Toast.makeText(activity, "추가되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
