@@ -52,7 +52,7 @@ class CalendarFragment : Fragment() {
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             dateView.visibility = View.VISIBLE
             dateView.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
-            //데이터 베이스
+            //데이터 베이스 추가
         }
     }
 }
