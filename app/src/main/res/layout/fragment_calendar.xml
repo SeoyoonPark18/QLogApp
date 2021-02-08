@@ -9,75 +9,13 @@
     android:overScrollMode="ifContentScrolls"
     tools:context=".ui.calendar.CalendarFragment">
 
-    <!-- days header -->
-
-    <!-- days view -->
-
-    <!--<CalendarView
+    <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:focusedMonthDateColor="@color/blue"
-        android:soundEffectsEnabled="false"
-        android:splitMotionEvents="false"
-        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:weekNumberColor="@color/blue" />-->
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:layout_gravity="center"
-        android:rowCount="1">
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
-            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
-            android:tint="@color/pink" />
-
-        <TextView
-            android:id="@+id/YearMonth"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textSize="24sp" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
-            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
-            android:tint="@color/pink" />
-    </GridLayout>
-
-    <LinearLayout
-        android:id="@+id/calendar_header"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <!-- 달력의 요일 섹션 구성 -->
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:textColor="#222222"
-            android:text="MON"/>
-        ...일요일까지 반복. 구성하고자 하는 달력 스타일에 따라 커스터마이징 할 것.
-    </LinearLayout> <!-- 달력의 일자 섹션 구성 -->
-    <GridView
-        android:id="@+id/calendar_grid"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:numColumns="7"/>
-
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -162,4 +100,3 @@
 
 
 </LinearLayout>
-

@@ -30,9 +30,25 @@ class Answeractivity : AppCompatActivity() {
         }
 
     }
-   // override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-  //      super.onCreateOptionsMenu(menu, inflater)
-      //  inflater.inflate(R.menu.private_menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.private_menu, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.ans_public -> {
+                // 친구에게 공개
+                true
+            }
+            R.id.ans_private -> {
+                // 친구에게 비공개
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     }
 
 
