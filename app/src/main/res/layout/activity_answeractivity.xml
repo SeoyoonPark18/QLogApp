@@ -6,6 +6,51 @@
     android:layout_height="match_parent"
     tools:context=".Answeractivity">
 
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="313dp"
+        android:layout_marginLeft="313dp"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:padding="3dp"
+        android:src="@drawable/ic_baseline_camera_alt_24"
+        app:layout_constraintEnd_toStartOf="@+id/textButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answers"
+        tools:src="@drawable/ic_baseline_camera_alt_24"
+        tools:srcCompat="@drawable/ic_baseline_camera_alt_24" />
+
+    <ImageButton
+        android:id="@+id/emotionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#00FFFFFF"
+        android:padding="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textButton"
+        app:layout_constraintTop_toBottomOf="@+id/answers"
+        tools:src="@drawable/ic_baseline_emoji_emotions_24"
+        tools:srcCompat="@drawable/ic_baseline_emoji_emotions_24" />
+
+    <ImageButton
+        android:id="@+id/textButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#00FFFFFF"
+        android:padding="3dp"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toStartOf="@+id/emotionButton"
+        app:layout_constraintStart_toEndOf="@+id/cameraButton"
+        app:layout_constraintTop_toBottomOf="@+id/answers"
+        tools:src="@drawable/ic_baseline_text_fields_24"
+        tools:srcCompat="@drawable/ic_baseline_text_fields_24" />
+
     <TextView
         android:id="@+id/ques"
         android:layout_width="wrap_content"
@@ -35,46 +80,5 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ques" />
-
-    <ImageButton
-        android:id="@+id/cameraButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="313dp"
-        android:layout_marginLeft="313dp"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:padding="3dp"
-        app:layout_constraintEnd_toStartOf="@+id/textButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answers"
-        tools:srcCompat="@drawable/ic_baseline_camera_alt_24" />
-
-    <ImageButton
-        android:id="@+id/textButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="#00FFFFFF"
-        android:padding="3dp"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toStartOf="@+id/emotionButton"
-        app:layout_constraintStart_toEndOf="@+id/cameraButton"
-        app:layout_constraintTop_toBottomOf="@+id/answers"
-        tools:srcCompat="@drawable/ic_baseline_text_fields_24" />
-
-    <ImageButton
-        android:id="@+id/emotionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#00FFFFFF"
-        android:padding="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textButton"
-        app:layout_constraintTop_toBottomOf="@+id/answers"
-        tools:srcCompat="@drawable/ic_baseline_emoji_emotions_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,9 +32,9 @@ class Answeractivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
         ques = findViewById(R.id.ques)
-        camBtn = findViewById(R.id.cameraButton)
-        txtBtn = findViewById(R.id.textButton)
-        emoBtn = findViewById(R.id.emotionButton)
+       // camBtn = findViewById(R.id.cameraButton)
+      //  txtBtn = findViewById(R.id.textButton)
+       // emoBtn = findViewById(R.id.emotionButton)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.blue)))
         val intent = intent
 
