@@ -8,4 +8,5 @@ class Friend_Activity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friend)
     }
+
 }

@@ -32,6 +32,9 @@
         <activity
             android:name=".Friend_Activity"
             android:label="Friend"/>
+        <activity
+            android:name=".Dialog"/>
+
     </application>
 
 </manifest>
