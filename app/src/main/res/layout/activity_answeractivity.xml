@@ -36,4 +36,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ques" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answers">
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#00FFFFFF"
+            android:padding="3dp"
+            tools:srcCompat="@drawable/ic_baseline_camera_alt_24" />
+
+        <ImageButton
+            android:id="@+id/textButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:scaleType="centerInside"
+            android:padding="3dp"
+            tools:srcCompat="@drawable/ic_baseline_text_fields_24" />
+
+        <ImageButton
+            android:id="@+id/emotionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
+            android:padding="3dp"
+            tools:srcCompat="@drawable/ic_baseline_emoji_emotions_24" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

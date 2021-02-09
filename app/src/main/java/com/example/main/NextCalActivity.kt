@@ -40,11 +40,10 @@ class NextCalActivity : AppCompatActivity() {
         diaryImageView = findViewById(R.id.diaryImageView)
         emotion = findViewById(R.id.emotion)
 
+        intent.extras!!
         dateTextView.text = intent.getStringExtra("KEY_DATE")
         question.text = intent.getStringExtra("KEY_QUESTION")
         answer.text = intent.getStringExtra("KEY_ANSWER")
-
-        intent.extras!!
         val byteArray: ByteArray = intent.getByteArrayExtra("KEY_IMAGE")!!
 
         if(byteArray.isNotEmpty()) {
