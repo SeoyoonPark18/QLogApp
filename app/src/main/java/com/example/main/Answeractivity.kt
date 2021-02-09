@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBar
@@ -16,11 +17,17 @@ import com.google.android.material.internal.ContextUtils.getActivity
 class Answeractivity : AppCompatActivity()
 {
     lateinit var ques : TextView
+    lateinit var camBtn : ImageButton
+    lateinit var txtBtn : ImageButton
+    lateinit var emoBtn : ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
         ques = findViewById(R.id.ques)
+        camBtn = findViewById(R.id.cameraButton)
+        txtBtn = findViewById(R.id.textButton)
+        emoBtn = findViewById(R.id.emotionButton)
         val intent = intent
 
         val year = intent.getStringExtra("year")
