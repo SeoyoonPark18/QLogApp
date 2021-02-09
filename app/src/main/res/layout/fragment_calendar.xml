@@ -30,9 +30,10 @@
 
             <TextView
                 android:id="@+id/dateView"
-                android:layout_width="340dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -45,8 +46,7 @@
                 android:layout_marginVertical="10dp"
                 android:background="#00FFFFFF"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_baseline_fullscreen_24"
-                android:tint="#FFFFFF" />
+                android:src="@drawable/ic_baseline_fullscreen_24" />
         </LinearLayout>
 
         <ScrollView
@@ -55,9 +55,6 @@
             android:layout_height="match_parent"
             android:background="@color/pink"
             android:overScrollMode="ifContentScrolls"
-            android:scrollbars="none"
-            android:soundEffectsEnabled="false"
-            android:splitMotionEvents="false"
             android:verticalScrollbarPosition="defaultPosition"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,12 +69,10 @@
                 <TextView
                     android:id="@+id/questionView"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="120dp"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginVertical="15dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeMinTextSize="15sp"
                     tools:layout_editor_absoluteY="338dp" />
 
                 <TextView
@@ -86,8 +81,6 @@
                     android:layout_height="150dp"
                     android:layout_marginHorizontal="10dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    app:autoSizeMaxTextSize="18sp"
-                    app:autoSizeMinTextSize="14sp"
                     tools:layout_editor_absoluteX="154dp"
                     tools:layout_editor_absoluteY="476dp" />
 
@@ -99,7 +92,7 @@
                     android:layout_marginVertical="10dp"
                     android:maxWidth="390dp"
                     android:maxHeight="390dp"
-                    android:scaleType="fitCenter" />
+                    android:src="?attr/selectableItemBackground" />
 
             </LinearLayout>
         </ScrollView>
@@ -107,4 +100,3 @@
 
 
 </LinearLayout>
-
