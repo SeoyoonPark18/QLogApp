@@ -1,5 +1,9 @@
 package com.example.main
 
+import android.graphics.Color
+import android.graphics.Color.blue
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -7,6 +11,7 @@ import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +26,8 @@ class Answeractivity : AppCompatActivity()
     lateinit var txtBtn : ImageButton
     lateinit var emoBtn : ImageButton
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_answeractivity)
@@ -28,6 +35,7 @@ class Answeractivity : AppCompatActivity()
         camBtn = findViewById(R.id.cameraButton)
         txtBtn = findViewById(R.id.textButton)
         emoBtn = findViewById(R.id.emotionButton)
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.blue)))
         val intent = intent
 
         val year = intent.getStringExtra("year")
@@ -40,7 +48,7 @@ class Answeractivity : AppCompatActivity()
 
         }else{
             // 질문 수정이 없었다면 설정된 질문 물어보기
-            // 질문들은 리스트로 처리
+            // 처리 안 되는 중...
             ques.text = "Q. 당신은 행복한가요? " // default
         }
 

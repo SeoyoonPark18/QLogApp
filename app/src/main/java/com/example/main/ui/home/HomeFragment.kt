@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
         date.setText("$year" +"/" + "$month" + "/"+ "$day")
 
         writeButton.setOnClickListener{
-            intent.putExtra("question", question.getText().toString())
+            intent.putExtra("question", "Q. " + question.getText().toString())
            // intent.putExtra("cal", cal)
             intent.putExtra("year", year)
             intent.putExtra("month", month)
