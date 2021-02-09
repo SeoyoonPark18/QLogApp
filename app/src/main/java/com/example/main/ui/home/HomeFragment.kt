@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     lateinit var writeButton : FloatingActionButton
-    lateinit var refreshButton : FloatingActionButton
     lateinit var fixQButton : FloatingActionButton
     lateinit var shareButton : FloatingActionButton
     lateinit var question : EditText
@@ -47,7 +46,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         writeButton = view.findViewById(R.id.writeButton)
-        refreshButton = view.findViewById(R.id.refreshButton)
         fixQButton = view.findViewById(R.id.fixQButton)
         shareButton = view.findViewById(R.id.shareButton)
         question = view.findViewById(R.id.questionText)
@@ -92,3 +90,4 @@ class HomeFragment : Fragment() {
     }
 
 }
+
