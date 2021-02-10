@@ -168,7 +168,7 @@ class FriendsFragment : Fragment() {
 
             layout_item.setOnClickListener {
                 val intent = Intent(getActivity(), Friend_Activity::class.java)
-                //intent.putExtra("intent_name", nameData)
+                intent.putExtra("intent_name", nameData)
                 startActivity(intent)
             }
 
