@@ -55,12 +55,12 @@ class HomeFragment : Fragment() {
         // 상단바 이름 변경
         (activity as AppCompatActivity).supportActionBar?.title = "홈"
 
-
-        var intent = Intent(getActivity(), Answeractivity::class.java)
+        val intent = Intent(getActivity(), Answeractivity::class.java)
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR).toString()
         val month = (cal.get(Calendar.MONTH)+1).toString()
         val day = cal.get(Calendar.DATE).toString()
+
         date.setText("$year" +"/" + "$month" + "/"+ "$day")
 
         writeButton.setOnClickListener{
@@ -69,6 +69,9 @@ class HomeFragment : Fragment() {
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
+            intent.putExtra("id2", id)
+
+
             startActivity(intent)
             var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
         }

@@ -33,9 +33,10 @@ class RegisterActivity : AppCompatActivity() {
             var str_name: String = edtName.text.toString()
             var str_id: String = edtId.text.toString()
             var str_pw: String = edtPw.text.toString()
+            val logoff = 0
 
             sqlitedb = dbManager.writableDatabase
-            sqlitedb.execSQL("INSERT INTO register VALUES ('"+str_name+"','"+str_id+"','"+str_pw+"','"+null+"','"+null+"','"+null+ "')")
+            sqlitedb.execSQL("INSERT INTO register VALUES ('"+str_name+"','"+str_id+"','"+str_pw+"')")
             sqlitedb.close()
 
             val intent = Intent(this, LoginActivtiy::class.java)

@@ -24,6 +24,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var pw: String
 
     lateinit var dbManager: DBManager
+
+    lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +51,7 @@ class LoginActivtiy : AppCompatActivity() {
 
             var idData = ""
             var pwData = ""
+            var on = "On"
 
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
@@ -61,9 +64,11 @@ class LoginActivtiy : AppCompatActivity() {
             }
             if (id == idData && pw == pwData) {
                 val intent = Intent(this, MainActivity::class.java)
-                val id_intent = Intent(this, Answeractivity::class.java)
-                id_intent.putExtra("id", id)
-                id_intent.putExtra("pw", pw)
+                dbManager2 = DBManager2(this, "list", null, 1)
+                sqlitedb = dbManager2.writableDatabase
+                sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on')")
+                sqlitedb.close()
+                //id text, ques text, ans text, date text, logonoff text
                 startActivity(intent)
 
             } else {

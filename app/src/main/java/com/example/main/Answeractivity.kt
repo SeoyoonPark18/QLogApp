@@ -30,8 +30,9 @@ class Answeractivity : AppCompatActivity()
 
     lateinit var photo : ImageView
 
-    lateinit var dbManager: DBManager
+    lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
+
 
 
 
@@ -62,28 +63,36 @@ class Answeractivity : AppCompatActivity()
             }
         }
     }
-    fun dbmethod(){
+    private fun save(){
+        // register db에서 찾아서
+        // id랑 동일한거 찾은 후
+        // 해당 id의 릴레이션들에 질문, 답변, 날짜 저장
+        dbManager2 = DBManager2(this, "list", null, 1)
+
+        sqlitedb = dbManager2.readableDatabase
         var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM list;", null)
 
-        val year = intent.getStringExtra("year")
-        val month = intent.getStringExtra("month")
-        val day = intent.getStringExtra("day")
-        val date : String = "$year" + "$month" + "$day"
+        var on = "On"
+        var idData = ""
+        var onf = ""
 
-        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
-        var id = intent.getStringExtra("id")
-        var idData : String = ""
         while (cursor.moveToNext()) {
-            idData = cursor.getString(1)
-            if(id == idData) {
-                sqlitedb = dbManager.writableDatabase
-                sqlitedb.execSQL("INSERT INTO register VALUES ('"+null+"','"+null+"','"+null+"','"+ques.text+"','"+answer.text+"','"+date+ "')")
-                sqlitedb.close()
-            }
-            else{
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-            }
+            onf = cursor.getString(4)
+            idData = cursor.getString(0)
+
         }
+        if (onf == on) { // 로그인 상태라면
+            Toast.makeText(this, "$idData", Toast.LENGTH_SHORT).show()
+            sqlitedb = dbManager2.writableDatabase
+            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$ques', 'null', 'null', '$on')")
+            sqlitedb.close()
+        }
+        else{
+
+        }
+
+
 
         cursor.close()
         sqlitedb.close()
@@ -99,32 +108,30 @@ class Answeractivity : AppCompatActivity()
         emoBtn3 = findViewById(R.id.emotionButton3)
         emoBtn4 = findViewById(R.id.emotionButton4)
         photo = findViewById(R.id.photoview)
-        dbManager = DBManager(this, "registerDB", null, 1)
         answer = findViewById(R.id.answers)
 
-        val intent = intent
+
+        var id =intent.getStringExtra("id2")
 
         val year = intent.getStringExtra("year")
         val month = intent.getStringExtra("month")
         val day = intent.getStringExtra("day")
         val date : String = "$year" + "$month" + "$day"
 
+       // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
 
-        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
+        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + id
 
         camBtn.setOnClickListener{
             loadImage()
             // db 추가
-
         }
 
         if(intent.hasExtra("question")){
             ques.text= intent.getStringExtra("question")
+
             // db
-
-            dbmethod()
-
 
 
         }else{
@@ -195,6 +202,8 @@ class Answeractivity : AppCompatActivity()
                 //저장
                 //공개 저장이 디폴트
                 // answer 변수 이용 db
+                save()
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
