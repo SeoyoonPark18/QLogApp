@@ -4,6 +4,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -63,7 +64,7 @@ class CalendarFragment : Fragment() {
 
         //sqlDB = DBManager(activity,)
 
-        var cursor: Cursor
+        //var cursor: Cursor
         // cursor =
         /*if (dateView.text == date) {
             // 데이터 베이스 questionTextView.text
@@ -74,15 +75,16 @@ class CalendarFragment : Fragment() {
             }
         }*/
 
+        //nextActivity로 이미지를 넘기기 위한 부분
         val stream = ByteArrayOutputStream()
-        val bitmap: Bitmap
-        val resize: Bitmap
         if (imageView.drawable != null) {
-            bitmap = imageView.drawable.toBitmap()
+            val bitmap: Bitmap = imageView.drawable.toBitmap(390, 390)
             val scale: Float = 1024 / bitmap.width.toFloat()
             val image_w: Int = (bitmap.width * scale).toInt()
             val image_h: Int = (bitmap.height * scale).toInt()
-            resize = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
+            val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
+            resize.compress(CompressFormat.PNG, 100, stream)
+
         } else {
             imageView.visibility = View.GONE
         }
@@ -98,15 +100,26 @@ class CalendarFragment : Fragment() {
         }
 
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            val bitmap: Bitmap
             val m: Int
             m = month + 1
             dateView.visibility = View.VISIBLE
             dateView.text = year.toString() + "년 " + m.toString() + "월 " + dayOfMonth + "일"
+            if (imageView.drawable != null) {
+                bitmap = imageView.drawable.toBitmap(390, 390)
+                val scale: Float = 1024 / bitmap.width.toFloat()
+                val image_w: Int = (bitmap.width * scale).toInt()
+                val image_h: Int = (bitmap.height * scale).toInt()
+                val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
+                resize.compress(CompressFormat.PNG, 100, stream)
+            } else {
+                imageView.visibility = View.GONE
+            }
             //데이터 베이스 추가
             //cursor = sqlDB.rawQuery()
-            if (dateView.text == date){
+            /*if (dateView.text == date){
 
-            }
+            }*/
         }
     }
 }

@@ -61,6 +61,7 @@ class NextCalActivity : AppCompatActivity() {
             answer.visibility = View.GONE
         }
 
+        //emotion database
         if (emotion.drawable == null){
             emotion.visibility = View.GONE
         }
