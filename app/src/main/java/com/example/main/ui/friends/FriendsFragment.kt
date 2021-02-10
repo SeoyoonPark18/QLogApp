@@ -77,6 +77,7 @@ class FriendsFragment : Fragment() {
 
         var idData: String = ""
         var nameData: String = ""
+        var add = false
 
         while (cursor.moveToNext()) {
             idData = cursor.getString(1)
@@ -94,10 +95,11 @@ class FriendsFragment : Fragment() {
                 layout.removeAllViews()
                 show_friend()
                 Toast.makeText(activity, "$nameData 님이 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                add = true
             }
-            else {
-                //Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        }
+        if(add == false) {
+            Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
         sqlitedb.close()
@@ -113,6 +115,7 @@ class FriendsFragment : Fragment() {
 
         var idData: String = ""
         var nameData: String = ""
+        var delete = false
 
         while (cursor.moveToNext()) {
             idData = cursor.getString(1)
@@ -131,10 +134,11 @@ class FriendsFragment : Fragment() {
                 layout.removeAllViews()
                 show_friend()
                 Toast.makeText(activity, "$nameData 님이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                delete = true
             }
-            else {
-                //Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        }
+        if(delete == false) {
+            Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
         sqlitedb.close()
