@@ -1,5 +1,6 @@
 package com.example.main
 
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,9 @@ class NextCalActivity : AppCompatActivity() {
     lateinit var emotion: ImageView
 
     lateinit var actionBar: ActionBar
+
+    lateinit var sqlDB: SQLiteDatabase
+    lateinit var DBManager: DBManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

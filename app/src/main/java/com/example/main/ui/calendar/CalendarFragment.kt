@@ -1,6 +1,7 @@
 package com.example.main.ui.calendar
 
 import android.content.Intent
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.os.Build
@@ -34,13 +35,14 @@ class CalendarFragment : Fragment() {
     lateinit var sqlDB: SQLiteDatabase
     lateinit var DBManager: DBManager
 
+    lateinit var date: String
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        calendarViewModel =
-                ViewModelProvider(this).get(CalendarViewModel::class.java)
+        calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_calendar, container, false)
         return root
     }
@@ -60,12 +62,17 @@ class CalendarFragment : Fragment() {
                 LocalDate.now().month.value.toString().toInt() + "월 " +
                 LocalDate.now().dayOfMonth + "일")
 
-        // 데이터 베이스 questionTextView.text
+        //sqlDB = DBManager(activity,)
 
-        if (answerTextView.text.isBlank()) {
-            answerTextView.visibility = View.GONE
-        } /*데이터 베이스else {
+        var cursor: Cursor
+        // cursor =
+        /*if (dateView.text == date) {
+            // 데이터 베이스 questionTextView.text
+            // 데이터 베이스 answerTextView.text
 
+            if (answerTextView.text.isBlank()) {
+                answerTextView.visibility = View.GONE
+            }
         }*/
 
         val stream = ByteArrayOutputStream()
@@ -97,7 +104,10 @@ class CalendarFragment : Fragment() {
             dateView.visibility = View.VISIBLE
             dateView.text = year.toString() + "년 " + m.toString() + "월 " + dayOfMonth + "일"
             //데이터 베이스 추가
+            //cursor = sqlDB.rawQuery()
+            if (dateView.text == date){
+
+            }
         }
     }
-
 }
