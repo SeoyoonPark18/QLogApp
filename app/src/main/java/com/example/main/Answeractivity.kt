@@ -35,6 +35,7 @@ class Answeractivity : AppCompatActivity()
     lateinit var date : String
     lateinit var emotion : String
     lateinit var secret : String
+    lateinit var pic : String
 
 
 
@@ -97,7 +98,7 @@ class Answeractivity : AppCompatActivity()
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "$idData", Toast.LENGTH_SHORT).show()
             sqlitedb = dbManager2.writableDatabase
-            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret')")
+            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
             sqlitedb.close()
         }
         else{
@@ -174,6 +175,7 @@ class Answeractivity : AppCompatActivity()
         if(requestCode == gallery){
             if(resultCode == Activity.RESULT_OK){
                 val selectedPhotoUri = data?.data
+                pic = selectedPhotoUri.toString()
                 try {
                     selectedPhotoUri?.let {
                         if(Build.VERSION.SDK_INT < 28) {
