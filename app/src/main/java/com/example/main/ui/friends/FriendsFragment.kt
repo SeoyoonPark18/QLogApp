@@ -54,14 +54,6 @@ class FriendsFragment : Fragment() {
     // 메뉴 옵션
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId) {
-            R.id.group_add -> {
-                dialog("친구 추가", "그룹에 추가할 친구의 아이디를 입력해주세요.")
-                return true
-            }
-            R.id.group_del -> {
-                dialog("친구 삭제", "그룹에 삭제할 친구의 아이디를 입력해주세요.")
-                return true
-            }
             R.id.friend_add -> {
                 dialog("친구 추가", "추가할 친구의 아이디를 입력해주세요.")
                 return true
@@ -85,6 +77,7 @@ class FriendsFragment : Fragment() {
 
         var idData: String = ""
         var nameData: String = ""
+        var add = false
 
         while (cursor.moveToNext()) {
             idData = cursor.getString(1)
@@ -102,10 +95,11 @@ class FriendsFragment : Fragment() {
                 layout.removeAllViews()
                 show_friend()
                 Toast.makeText(activity, "$nameData 님이 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                add = true
             }
-            else {
-                //Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        }
+        if(add == false) {
+            Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
         sqlitedb.close()
@@ -121,6 +115,7 @@ class FriendsFragment : Fragment() {
 
         var idData: String = ""
         var nameData: String = ""
+        var delete = false
 
         while (cursor.moveToNext()) {
             idData = cursor.getString(1)
@@ -139,10 +134,11 @@ class FriendsFragment : Fragment() {
                 layout.removeAllViews()
                 show_friend()
                 Toast.makeText(activity, "$nameData 님이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                delete = true
             }
-            else {
-                //Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        }
+        if(delete == false) {
+            Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
         sqlitedb.close()
@@ -167,7 +163,7 @@ class FriendsFragment : Fragment() {
             tvName.text = nameData
             tvName.textSize = 25f
             //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
-            tvName.setTextColor(Color.BLACK)
+            tvName.setTextColor(Color.GRAY)
             layout_item.addView(tvName)
 
             layout_item.setOnClickListener {

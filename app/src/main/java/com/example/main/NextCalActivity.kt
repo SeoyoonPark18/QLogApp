@@ -6,10 +6,7 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.widget.Constraints
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -72,7 +69,12 @@ class NextCalActivity : AppCompatActivity() {
 
         deleteButton.setOnClickListener {
             //데이터베이스
+            /*sqlDB = DBManager.writableDatabase
+            sqlDB.execSQL("DELETE FROM registerTBL WHERE gDate = '" + dateTextView.text.toString() + "';")
+
+            sqlDB.close()*/
             onBackPressed()
+            Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
     }
 }
