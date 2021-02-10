@@ -32,6 +32,9 @@ class Answeractivity : AppCompatActivity()
 
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
+    lateinit var date : String
+    lateinit var emotion : String
+    lateinit var secret : String
 
 
 
@@ -47,19 +50,26 @@ class Answeractivity : AppCompatActivity()
         when(emo){
             emoBtn1 -> {
                 //happy 데이터베이스에 저장
+                emotion = "Happy"
                 Toast.makeText(this, "Happy", Toast.LENGTH_SHORT).show()
             }
             emoBtn2 -> {
                 //good 데이터베이스에 저장
+                emotion = "Good"
                 Toast.makeText(this, "Good", Toast.LENGTH_SHORT).show()
             }
             emoBtn3 -> {
                 //soso 데이터베이스에 저장
+                emotion = "Soso"
                 Toast.makeText(this, "Soso", Toast.LENGTH_SHORT).show()
             }
             emoBtn4 -> {
                 //bad 데이터베이스에 저장
+                emotion = "Bad"
                 Toast.makeText(this, "Bad", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                emotion = "None"
             }
         }
     }
@@ -76,6 +86,8 @@ class Answeractivity : AppCompatActivity()
         var on = "On"
         var idData = ""
         var onf = ""
+        var q = ques.text.toString()
+        var a = answer.text.toString()
 
         while (cursor.moveToNext()) {
             onf = cursor.getString(4)
@@ -85,7 +97,7 @@ class Answeractivity : AppCompatActivity()
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "$idData", Toast.LENGTH_SHORT).show()
             sqlitedb = dbManager2.writableDatabase
-            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$ques', 'null', 'null', '$on')")
+            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret')")
             sqlitedb.close()
         }
         else{
@@ -109,19 +121,19 @@ class Answeractivity : AppCompatActivity()
         emoBtn4 = findViewById(R.id.emotionButton4)
         photo = findViewById(R.id.photoview)
         answer = findViewById(R.id.answers)
+        secret = "public"
 
 
-        var id =intent.getStringExtra("id2")
 
         val year = intent.getStringExtra("year")
         val month = intent.getStringExtra("month")
         val day = intent.getStringExtra("day")
-        val date : String = "$year" + "$month" + "$day"
+        date = "$year" +"년 " + "$month" + "월 "+ "$day" + "일"
 
        // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
 
-        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + id
+        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
 
         camBtn.setOnClickListener{
             loadImage()
@@ -130,9 +142,7 @@ class Answeractivity : AppCompatActivity()
 
         if(intent.hasExtra("question")){
             ques.text= intent.getStringExtra("question")
-
             // db
-
 
         }else{
             // 질문 수정이 없었다면 설정된 질문 물어보기
@@ -191,7 +201,7 @@ class Answeractivity : AppCompatActivity()
         return when (item.itemId) {
             R.id.ans_private -> {
                 // 비공개
-                //db
+                secret = "private"
                 true
             }
             R.id.ans_public -> {
@@ -201,9 +211,7 @@ class Answeractivity : AppCompatActivity()
             R.id.save_button -> {
                 //저장
                 //공개 저장이 디폴트
-                // answer 변수 이용 db
                 save()
-
                 true
             }
             else -> super.onOptionsItemSelected(item)

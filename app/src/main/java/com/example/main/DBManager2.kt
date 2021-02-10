@@ -13,11 +13,12 @@ class DBManager2(
 
     override fun onCreate(db: SQLiteDatabase?) {
 
-        db!!.execSQL("CREATE TABLE list (id text, ques text, ans text, date text, logonoff text)")
+        db!!.execSQL("CREATE TABLE list (id text, ques text, ans text, date text, logonoff text, emotion text, secret text)")
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
+        db!!.execSQL("DROP TABLE IF EXISTS list")
+        onCreate(db)
     }
 }

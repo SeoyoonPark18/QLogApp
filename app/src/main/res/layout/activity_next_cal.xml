@@ -6,39 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".NextCalActivity">
 
-    <TextView
-        android:id="@+id/dateText"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/blue"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/closeButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/closeButton"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_gravity="right"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center|right"
+            android:layout_margin="16dp"
+            android:background="#00FFFFFF"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+            android:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:gravity="left|center_vertical"
+            android:textAlignment="viewEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="RtlCompat" />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -52,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateText">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,25 +68,26 @@
 
                 <TextView
                     android:id="@+id/qTextView"
-                    android:layout_width="300dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
+                    android:maxWidth="375dp"
+                    android:minWidth="320dp"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/emotion"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="#FFFFFF"
                     android:scaleType="fitCenter"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center_vertical"
-                    app:tint="@android:color/holo_orange_light"
-                    android:src="@drawable/ic_baseline_emoji_emotions_24" />
+                    app:tint="@android:color/holo_orange_light" />
             </LinearLayout>
 
             <TextView

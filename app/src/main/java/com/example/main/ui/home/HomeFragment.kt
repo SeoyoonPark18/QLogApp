@@ -69,7 +69,6 @@ class HomeFragment : Fragment() {
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
-            intent.putExtra("id2", id)
 
 
             startActivity(intent)
