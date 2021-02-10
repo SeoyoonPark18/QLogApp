@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeF"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
@@ -43,15 +44,6 @@
             app:useCompatPadding="false" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/refreshButton"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@android:drawable/ic_popup_sync"
-            app:backgroundTint="#00FFFFFF"
-            app:elevation="0dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareButton"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
@@ -64,11 +56,10 @@
             android:id="@+id/writeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttonshape"
             android:radius="100dp"
-            android:src="@android:drawable/ic_menu_send"
-            android:tint="#000000"
-            app:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_baseline_check_24"
+            app:backgroundTint="@color/blue"
+            android:tint="@color/white"
             app:elevation="0dp"
             app:rippleColor="#FFFFFF" />
 
@@ -78,13 +69,12 @@
         android:id="@+id/TodayQ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:text="오늘의 질문"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <ImageView
         android:id="@+id/line"
@@ -96,5 +86,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/TodayQ" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="Date"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/TodayQ"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

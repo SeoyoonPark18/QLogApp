@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.Answeractivity
 import com.example.main.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
+import java.util.*
 import android.widget.Toast.makeText as toastMakeText
 
 class HomeFragment : Fragment() {
@@ -21,10 +24,11 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     lateinit var writeButton : FloatingActionButton
-    lateinit var refreshButton : FloatingActionButton
     lateinit var fixQButton : FloatingActionButton
     lateinit var shareButton : FloatingActionButton
     lateinit var question : EditText
+    lateinit var date : TextView
+    val REQUEST_COUNT=1
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -37,26 +41,41 @@ class HomeFragment : Fragment() {
 
         return root
 
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         writeButton = view.findViewById(R.id.writeButton)
-        refreshButton = view.findViewById(R.id.refreshButton)
         fixQButton = view.findViewById(R.id.fixQButton)
         shareButton = view.findViewById(R.id.shareButton)
         question = view.findViewById(R.id.questionText)
+        date = view.findViewById(R.id.date)
         question.isEnabled = false
 
-        var intent = Intent(getActivity(), Answeractivity::class.java)
+        // 상단바 이름 변경
+        (activity as AppCompatActivity).supportActionBar?.title = "홈"
 
+        val intent = Intent(getActivity(), Answeractivity::class.java)
+
+        val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR).toString()
+        val month = (cal.get(Calendar.MONTH)+1).toString()
+        val day = cal.get(Calendar.DATE).toString()
+
+        date.setText("$year" +"/" + "$month" + "/"+ "$day")
 
         writeButton.setOnClickListener{
-            intent.putExtra("question", question.getText().toString())
+            intent.putExtra("question", "Q. " + question.getText().toString())
+           // intent.putExtra("cal", cal)
+            intent.putExtra("year", year)
+            intent.putExtra("month", month)
+            intent.putExtra("day", day)
             startActivity(intent)
             var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
+
+
+
         }
         fixQButton.setOnClickListener{
             question.isEnabled = true
@@ -76,3 +95,4 @@ class HomeFragment : Fragment() {
     }
 
 }
+

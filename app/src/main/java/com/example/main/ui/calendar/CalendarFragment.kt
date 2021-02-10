@@ -1,18 +1,25 @@
 package com.example.main.ui.calendar
 
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
-import android.widget.ImageButton
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.main.DBManager
 import com.example.main.NextCalActivity
 import com.example.main.R
+import java.io.ByteArrayOutputStream
+import java.time.LocalDate
 import java.util.*
 
 class CalendarFragment : Fragment() {
@@ -20,42 +27,99 @@ class CalendarFragment : Fragment() {
     private lateinit var calendarViewModel: CalendarViewModel
     lateinit var expansionButton: ImageButton
     lateinit var scrollText: ScrollView
-    lateinit var YearMonth: TextView
-    //lateinit var calendarView: CalendarView
+    lateinit var calendarView: CalendarView
     lateinit var dateView: TextView
+    lateinit var questionTextView: TextView
+    lateinit var answerTextView: TextView
+    lateinit var imageView: ImageView
+
+    lateinit var sqlDB: SQLiteDatabase
+    lateinit var DBManager: DBManager
+
+    lateinit var date: String
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        calendarViewModel =
-                ViewModelProvider(this).get(CalendarViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_calendar, container, false)
-        return root
+        calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
+        return inflater.inflate(R.layout.fragment_calendar, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         expansionButton = view.findViewById(R.id.expansionButton)
         scrollText = view.findViewById(R.id.scrollText)
-        YearMonth = view.findViewById(R.id.YearMonth)
-        //calendarView = view.findViewById(R.id.calendarView)
+        calendarView = view.findViewById(R.id.calendarView)
         dateView = view.findViewById(R.id.dateView)
+        questionTextView = view.findViewById(R.id.questionView)
+        answerTextView = view.findViewById(R.id.answerView)
+        imageView = view.findViewById(R.id.diaryImage)
 
-        YearMonth.text = String.format("%d년 %d월", Calendar.YEAR+2020, Calendar.MONTH)
-        dateView.text = String.format("%d년 %d월 %d일", Calendar.YEAR+2020, Calendar.MONTH, Calendar.DATE+2)
+        dateView.setText(LocalDate.now().year.toString() + "년 " +
+                LocalDate.now().month.value.toString().toInt() + "월 " +
+                LocalDate.now().dayOfMonth + "일")
 
-        expansionButton.setOnClickListener{
-            val intent = Intent(getActivity(), NextCalActivity::class.java)
-            intent.putExtra("KEY_DATE", dateView.text as String)
+        //sqlDB = DBManager(activity,)
+
+        //var cursor: Cursor
+        // cursor =
+        /*if (dateView.text == date) {
+            // 데이터 베이스 questionTextView.text
+            // 데이터 베이스 answerTextView.text
+
+            if (answerTextView.text.isBlank()) {
+                answerTextView.visibility = View.GONE
+            }
+        }*/
+
+        //nextActivity로 이미지를 넘기기 위한 부분
+        val stream = ByteArrayOutputStream()
+        if (imageView.drawable != null) {
+            val bitmap: Bitmap = imageView.drawable.toBitmap(390, 390)
+            val scale: Float = 1024 / bitmap.width.toFloat()
+            val image_w: Int = (bitmap.width * scale).toInt()
+            val image_h: Int = (bitmap.height * scale).toInt()
+            val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
+            resize.compress(CompressFormat.PNG, 100, stream)
+
+        } else {
+            imageView.visibility = View.GONE
+        }
+        val byteArray: ByteArray = stream.toByteArray()
+
+        expansionButton.setOnClickListener {
+            val intent = Intent(activity, NextCalActivity::class.java)
+            intent.putExtra("KEY_DATE", dateView.text.toString())
+            intent.putExtra("KEY_QUESTION", questionTextView.text.toString())
+            intent.putExtra("KEY_ANSWER", answerTextView.text.toString())
+            intent.putExtra("KEY_IMAGE", byteArray)
             startActivity(intent)
         }
 
-        /*calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            val bitmap: Bitmap
+            val m: Int
+            m = month + 1
             dateView.visibility = View.VISIBLE
-            dateView.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
-            //데이터 베이스
-        }*/
+            dateView.text = year.toString() + "년 " + m.toString() + "월 " + dayOfMonth + "일"
+            if (imageView.drawable != null) {
+                bitmap = imageView.drawable.toBitmap(390, 390)
+                val scale: Float = 1024 / bitmap.width.toFloat()
+                val image_w: Int = (bitmap.width * scale).toInt()
+                val image_h: Int = (bitmap.height * scale).toInt()
+                val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
+                resize.compress(CompressFormat.PNG, 100, stream)
+            } else {
+                imageView.visibility = View.GONE
+            }
+            //데이터 베이스 추가
+            //cursor = sqlDB.rawQuery()
+            /*if (dateView.text == date){
+
+            }*/
+        }
     }
 }

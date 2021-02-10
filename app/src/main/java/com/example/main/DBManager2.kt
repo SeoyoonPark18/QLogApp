@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DBManager(
+class DBManager2(
     context: Context?,
     name: String?,
     factory: SQLiteDatabase.CursorFactory?,
@@ -13,11 +13,12 @@ class DBManager(
 
     override fun onCreate(db: SQLiteDatabase?) {
 
-        db!!.execSQL("CREATE TABLE register (name text, id text PRIMARY KEY, pw text)")
+        db!!.execSQL("CREATE TABLE list (id text, ques text, ans text, date text, logonoff text, emotion text, secret text, pic text)")
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
+        db!!.execSQL("DROP TABLE IF EXISTS list")
+        onCreate(db)
     }
 }

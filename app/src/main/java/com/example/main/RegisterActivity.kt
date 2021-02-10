@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.appcompat.app.ActionBar
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -17,6 +18,7 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var edtPw: EditText
 
     lateinit var btnRegister: Button
+    lateinit var actionBar : ActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,10 @@ class RegisterActivity : AppCompatActivity() {
         edtName = findViewById(R.id.edtName)
         edtId = findViewById(R.id.edtId)
         edtPw = findViewById(R.id.edtPw)
+
+        actionBar = supportActionBar!!
+        actionBar.hide()
+
 
         dbManager = DBManager(this, "registerDB", null, 1)
 
