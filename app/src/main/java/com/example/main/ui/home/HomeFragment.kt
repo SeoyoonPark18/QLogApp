@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
     lateinit var shareButton : FloatingActionButton
     lateinit var question : EditText
     lateinit var date : TextView
+    val REQUEST_COUNT=1
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -56,6 +57,7 @@ class HomeFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.title = "홈"
 
         val intent = Intent(getActivity(), Answeractivity::class.java)
+
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR).toString()
         val month = (cal.get(Calendar.MONTH)+1).toString()
@@ -69,10 +71,11 @@ class HomeFragment : Fragment() {
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
-
-
             startActivity(intent)
             var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
+
+
+
         }
         fixQButton.setOnClickListener{
             question.isEnabled = true

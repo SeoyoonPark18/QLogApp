@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         setCurrentFragment(HomeFragment())
         setTitle("홈")
 
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.navigation_home-> {

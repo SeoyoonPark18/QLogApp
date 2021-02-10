@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.main.ui.home.HomeFragment
 import java.lang.Exception
 
 class Answeractivity : AppCompatActivity()
@@ -101,7 +102,9 @@ class Answeractivity : AppCompatActivity()
             sqlitedb.close()
 
             var intent = Intent(this, MainActivity::class.java)
+           // intent.putExtra("count", 1)
             startActivity(intent)
+
         }
         else{
 
@@ -112,6 +115,9 @@ class Answeractivity : AppCompatActivity()
         cursor.close()
         sqlitedb.close()
     }
+
+
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,6 +179,7 @@ class Answeractivity : AppCompatActivity()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
 
         if(requestCode == gallery){
             if(resultCode == Activity.RESULT_OK){
