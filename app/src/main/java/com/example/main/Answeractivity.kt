@@ -70,7 +70,6 @@ class Answeractivity : AppCompatActivity()
                 Toast.makeText(this, "Bad", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                emotion = "None"
             }
         }
     }
@@ -96,10 +95,13 @@ class Answeractivity : AppCompatActivity()
 
         }
         if (onf == on) { // 로그인 상태라면
-            Toast.makeText(this, "$idData", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
             sqlitedb = dbManager2.writableDatabase
             sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
             sqlitedb.close()
+
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
         else{
 
@@ -123,7 +125,8 @@ class Answeractivity : AppCompatActivity()
         photo = findViewById(R.id.photoview)
         answer = findViewById(R.id.answers)
         secret = "public"
-
+        pic = "none"
+        emotion = "none"
 
 
         val year = intent.getStringExtra("year")
@@ -138,12 +141,11 @@ class Answeractivity : AppCompatActivity()
 
         camBtn.setOnClickListener{
             loadImage()
-            // db 추가
+
         }
 
         if(intent.hasExtra("question")){
             ques.text= intent.getStringExtra("question")
-            // db
 
         }else{
             // 질문 수정이 없었다면 설정된 질문 물어보기
