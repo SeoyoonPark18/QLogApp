@@ -54,14 +54,6 @@ class FriendsFragment : Fragment() {
     // 메뉴 옵션
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId) {
-            R.id.group_add -> {
-                dialog("친구 추가", "그룹에 추가할 친구의 아이디를 입력해주세요.")
-                return true
-            }
-            R.id.group_del -> {
-                dialog("친구 삭제", "그룹에 삭제할 친구의 아이디를 입력해주세요.")
-                return true
-            }
             R.id.friend_add -> {
                 dialog("친구 추가", "추가할 친구의 아이디를 입력해주세요.")
                 return true
@@ -167,7 +159,7 @@ class FriendsFragment : Fragment() {
             tvName.text = nameData
             tvName.textSize = 25f
             //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
-            tvName.setTextColor(Color.BLACK)
+            tvName.setTextColor(Color.GRAY)
             layout_item.addView(tvName)
 
             layout_item.setOnClickListener {
