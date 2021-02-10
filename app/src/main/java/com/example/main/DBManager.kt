@@ -10,9 +10,11 @@ class DBManager(
     factory: SQLiteDatabase.CursorFactory?,
     version: Int
 ) : SQLiteOpenHelper(context, name, factory, version) {
+
     override fun onCreate(db: SQLiteDatabase?) {
 
-        db!!.execSQL("CREATE TABLE register (name text, id text, pw text)")
+        db!!.execSQL("CREATE TABLE register (name text, id text, pw text, question text, answer text, date text)")
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

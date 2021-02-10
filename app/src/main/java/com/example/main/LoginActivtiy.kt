@@ -61,6 +61,9 @@ class LoginActivtiy : AppCompatActivity() {
             }
             if (id == idData && pw == pwData) {
                 val intent = Intent(this, MainActivity::class.java)
+                val id_intent = Intent(this, Answeractivity::class.java)
+                id_intent.putExtra("id", id)
+                id_intent.putExtra("pw", pw)
                 startActivity(intent)
 
             } else {

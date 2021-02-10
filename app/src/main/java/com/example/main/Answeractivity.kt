@@ -2,9 +2,12 @@ package com.example.main
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -23,7 +26,14 @@ class Answeractivity : AppCompatActivity()
     lateinit var emoBtn3 : ImageButton
     lateinit var emoBtn4 : ImageButton
 
+    lateinit var answer : EditText
+
     lateinit var photo : ImageView
+
+    lateinit var dbManager: DBManager
+    lateinit var sqlitedb: SQLiteDatabase
+
+
 
 
     val gallery = 0
@@ -52,6 +62,32 @@ class Answeractivity : AppCompatActivity()
             }
         }
     }
+    fun dbmethod(){
+        var cursor: Cursor
+
+        val year = intent.getStringExtra("year")
+        val month = intent.getStringExtra("month")
+        val day = intent.getStringExtra("day")
+        val date : String = "$year" + "$month" + "$day"
+
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+        var id = intent.getStringExtra("id")
+        var idData : String = ""
+        while (cursor.moveToNext()) {
+            idData = cursor.getString(1)
+            if(id == idData) {
+                sqlitedb = dbManager.writableDatabase
+                sqlitedb.execSQL("INSERT INTO register VALUES ('"+null+"','"+null+"','"+null+"','"+ques.text+"','"+answer.text+"','"+date+ "')")
+                sqlitedb.close()
+            }
+            else{
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        cursor.close()
+        sqlitedb.close()
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,27 +99,45 @@ class Answeractivity : AppCompatActivity()
         emoBtn3 = findViewById(R.id.emotionButton3)
         emoBtn4 = findViewById(R.id.emotionButton4)
         photo = findViewById(R.id.photoview)
+        dbManager = DBManager(this, "registerDB", null, 1)
+        answer = findViewById(R.id.answers)
 
         val intent = intent
+
         val year = intent.getStringExtra("year")
         val month = intent.getStringExtra("month")
         val day = intent.getStringExtra("day")
+        val date : String = "$year" + "$month" + "$day"
+
+
+
         supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
 
         camBtn.setOnClickListener{
             loadImage()
+            // db 추가
+
         }
+
         if(intent.hasExtra("question")){
             ques.text= intent.getStringExtra("question")
+            // db
+
+            dbmethod()
+
+
 
         }else{
             // 질문 수정이 없었다면 설정된 질문 물어보기
             ques.text = "Q. 당신은 행복한가요? " // default
+
         }
+
 
 
         emoBtn1.setOnClickListener {
             emotion(emoBtn1)
+            //db (아래 동일)
         }
         emoBtn2.setOnClickListener {
             emotion(emoBtn2)
@@ -130,6 +184,7 @@ class Answeractivity : AppCompatActivity()
         return when (item.itemId) {
             R.id.ans_private -> {
                 // 비공개
+                //db
                 true
             }
             R.id.ans_public -> {
@@ -139,6 +194,7 @@ class Answeractivity : AppCompatActivity()
             R.id.save_button -> {
                 //저장
                 //공개 저장이 디폴트
+                // answer 변수 이용 db
                 true
             }
             else -> super.onOptionsItemSelected(item)
