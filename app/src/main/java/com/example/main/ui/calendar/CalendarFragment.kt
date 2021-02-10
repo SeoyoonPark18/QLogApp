@@ -43,8 +43,7 @@ class CalendarFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_calendar, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_calendar, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
