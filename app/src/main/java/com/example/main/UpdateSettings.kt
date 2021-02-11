@@ -1,5 +1,7 @@
 package com.example.main
 
+import android.content.ContentValues
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,28 +12,40 @@ import android.widget.Toast
 class UpdateSettings : AppCompatActivity() {
 
     lateinit var edtExistId: EditText
-    lateinit var edtNewId: EditText
-    lateinit var btnConfirmId: Button
+    lateinit var edtNewName: EditText
+    lateinit var btnConfirmName: Button
+    lateinit var edtExistId2: EditText
+    lateinit var edtNewPw: EditText
+    lateinit var btnConfirmPw: Button
 
     lateinit var dbManager: DBManager
-    lateinit var sqlitedb: SQLiteDatabase
+    lateinit var sqlDB: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_settings)
 
-        dbManager = DBManager(this, "registerDB", null, 1)
+        dbManager = DBManager(this, "register", null, 1)
 
         edtExistId = findViewById(R.id.edtExistId)
-        edtNewId = findViewById(R.id.edtNewId)
-        btnConfirmId = findViewById(R.id.btnConfirmId)
+        edtNewName = findViewById(R.id.edtNewName)
+        btnConfirmName = findViewById(R.id.btnConfirmName)
+        edtExistId2 = findViewById(R.id.edtExistId2)
+        edtNewPw = findViewById(R.id.edtNewPw)
+        btnConfirmPw = findViewById(R.id.btnConfirmPw)
 
-        btnConfirmId.setOnClickListener {
-            sqlitedb = dbManager.writableDatabase
-            sqlitedb.execSQL("UPDATE registerDB SET id = " + edtNewId.text +" WHERE id = '"
+        btnConfirmName.setOnClickListener {
+            sqlDB = dbManager.writableDatabase
+            sqlDB.execSQL("UPDATE register SET name = " + edtNewName.text +" WHERE id = '"
                     + edtExistId.text.toString() +"';")
-
-            sqlitedb.close()
+            sqlDB.close()
+            Toast.makeText(applicationContext, "수정됨", Toast.LENGTH_SHORT).show()
+        }
+        btnConfirmPw.setOnClickListener {
+            sqlDB = dbManager.writableDatabase
+            sqlDB.execSQL("UPDATE register SET pw = " + edtNewPw.text +" WHERE id = '"
+                    + edtExistId2.text.toString() +"';")
+            sqlDB.close()
             Toast.makeText(applicationContext, "수정됨", Toast.LENGTH_SHORT).show()
         }
     }
