@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home-> {
                     setCurrentFragment(HomeFragment())
                     ab.setTitle("홈")
+
                 }
                 R.id.navigation_calendar -> {
                     setCurrentFragment(CalendarFragment())

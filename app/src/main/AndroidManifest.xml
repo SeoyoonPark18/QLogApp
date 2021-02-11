@@ -22,6 +22,7 @@
             android:name=".Answeractivity"
             android:label="@string/title_activity_answeractivity"
             android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".NextCalActivity"
             android:label="NextCalActivity"

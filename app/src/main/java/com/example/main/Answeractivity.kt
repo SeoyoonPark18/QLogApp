@@ -98,7 +98,17 @@ class Answeractivity : AppCompatActivity()
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
             sqlitedb = dbManager2.writableDatabase
-            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
+            //sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
+
+            sqlitedb.execSQL("UPDATE list SET ques='$q' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ans='$a' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET pic='$pic' WHERE id='$idData';")
+
+            //id text, ques text, ans text, date text, logonoff text, emotion text, secret text, pic text
             sqlitedb.close()
 
             var intent = Intent(this, MainActivity::class.java)
