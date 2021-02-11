@@ -1,7 +1,10 @@
 package com.example.main
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.ImageDecoder
@@ -14,6 +17,8 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.main.ui.home.HomeFragment
 import java.lang.Exception
 
@@ -39,13 +44,32 @@ class Answeractivity : AppCompatActivity()
     lateinit var pic : String
 
 
-
+    private fun permission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                var dlg = AlertDialog.Builder(this)
+                dlg.setTitle("권한이 필요한 이유")
+                dlg.setMessage("사진 정보를 얻기 위해서는 외부 저장소 권한이 필수로 필요합니다")
+                dlg.setPositiveButton("확인"){dialog, which -> ActivityCompat.requestPermissions(this@Answeractivity,
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),1000)}
+                dlg.setNegativeButton("취소", null)
+                dlg.show()
+            }else{
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                1000)
+            }
+        }
+        else {
+            loadImage()
+        }
+    }
 
 
     val gallery = 0
     private fun loadImage(){
+
         val intent_cam = Intent(Intent.ACTION_PICK)
-        intent_cam.type="image/*"
+        intent_cam.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         startActivityForResult(intent_cam, gallery)
     }
     private fun emotion(emo: ImageButton){
@@ -156,7 +180,7 @@ class Answeractivity : AppCompatActivity()
         supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
 
         camBtn.setOnClickListener{
-            loadImage()
+            permission()
 
         }
 
@@ -191,28 +215,15 @@ class Answeractivity : AppCompatActivity()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
-        if(requestCode == gallery){
-            if(resultCode == Activity.RESULT_OK){
-                val selectedPhotoUri = data?.data
-                pic = selectedPhotoUri.toString()
-                try {
-                    selectedPhotoUri?.let {
-                        if(Build.VERSION.SDK_INT < 28) {
-                            photo.setImageURI(data?.data)
-                        } else {
-                            val source = ImageDecoder.createSource(this.contentResolver, selectedPhotoUri)
-                            photo.setImageURI(data?.data)
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-            else{
-                Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        if(requestCode==gallery && resultCode == Activity.RESULT_OK){
+            val selectedPhotoUri = data?.data
+            photo.setImageURI(selectedPhotoUri)
+            pic = selectedPhotoUri.toString()
         }
+        else{
+            Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
