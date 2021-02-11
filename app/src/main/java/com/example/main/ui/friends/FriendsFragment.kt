@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.*
@@ -59,7 +60,7 @@ class FriendsFragment : Fragment() {
                 return true
             }
             R.id.friend_del -> {
-                dialog("친구 삭제", "삭제할 친구의 아이디를 입력해주세요.")
+                dialog("친구 삭제", "삭제할 친구의 이름을 입력해주세요.")
                 return true
             }
         }
@@ -113,17 +114,17 @@ class FriendsFragment : Fragment() {
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
 
-        var idData: String = ""
+        var name: String = ""
         var nameData: String = ""
         var delete = false
 
         while (cursor.moveToNext()) {
-            idData = cursor.getString(1)
+            nameData = cursor.getString(0)
 
             id = friend_id.text.toString()
 
-            if (id == idData) {
-                nameData = cursor.getString(0)
+            if (id == nameData) {
+                name = cursor.getString(0)
                 dbManager = DBManager(activity, "friendDB", null, 1)
 
                 //friendDB에 추가했던 친구 이름 삭제하기
@@ -157,15 +158,22 @@ class FriendsFragment : Fragment() {
             //id = cursor.getString(1)
 
             var layout_item: LinearLayout = LinearLayout(activity)
-            layout_item.orientation = LinearLayout.VERTICAL
+            layout_item.orientation = LinearLayout.HORIZONTAL
             layout_item.id = num
 
             var tvName: TextView = TextView(activity)
             tvName.text = nameData
             tvName.textSize = 25f
-            //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
+            tvName.setPadding(20,0,0,0)
             tvName.setTextColor(Color.GRAY)
             layout_item.addView(tvName)
+
+            var tvImageView: ImageView = ImageView(activity)
+            tvImageView.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24)
+            tvImageView.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvImageView.setPadding(700,0,0,0)
+            tvImageView.baselineAlignBottom
+            layout_item.addView(tvImageView)
 
             layout_item.setOnClickListener {
                 var change_id = layout_item.id
