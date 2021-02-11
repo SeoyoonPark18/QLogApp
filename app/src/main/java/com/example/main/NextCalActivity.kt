@@ -25,8 +25,6 @@ class NextCalActivity : AppCompatActivity() {
 
     lateinit var sqlDB: SQLiteDatabase
 
-    lateinit var emo: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_next_cal)
@@ -43,16 +41,13 @@ class NextCalActivity : AppCompatActivity() {
         diaryImageView = findViewById(R.id.diaryImageView)
         emotion = findViewById(R.id.emotion)
 
-        intent.extras!!
         dateTextView.text = intent.getStringExtra("KEY_DATE")
         question.text = intent.getStringExtra("KEY_QUESTION")
         answer.text = intent.getStringExtra("KEY_ANSWER")
-        emo = intent.getStringExtra("KEY_EMO").toString()
+        var emo = intent.getStringExtra("KEY_EMO")
+        var date = intent.getStringExtra("DATE")
+        intent.extras!!
         val byteArray: ByteArray = intent.getByteArrayExtra("KEY_IMAGE")!!
-
-        sqlDB = SQLiteDatabase.openDatabase(
-            "/data/data/com.example.main/databases/list",
-            null, SQLiteDatabase.OPEN_READWRITE)
 
         if(byteArray.isNotEmpty()) {
             val bitmap: Bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
@@ -79,8 +74,11 @@ class NextCalActivity : AppCompatActivity() {
         }
 
         deleteButton.setOnClickListener {
-            //데이터베이스
-            sqlDB.execSQL("DELETE FROM list WHERE date = '" + dateTextView.text.toString() + "';")
+            //해당 날짜 내용 삭제
+            sqlDB = SQLiteDatabase.openDatabase(
+                    "/data/data/com.example.main/databases/list",
+                    null, SQLiteDatabase.OPEN_READWRITE)
+            sqlDB.execSQL("DELETE FROM list WHERE date='" + dateTextView.text + "';")
             sqlDB.close()
             onBackPressed()
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()

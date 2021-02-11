@@ -75,9 +75,9 @@ open class CalendarFragment : Fragment() {
         calendarView.setSelectedDate(CalendarDay.today())
 
         dateView.setText(
-            LocalDate.now().year.toString() + "-" +
-                    LocalDate.now().month.value.toString().toInt() + "-" +
-                    LocalDate.now().dayOfMonth
+            LocalDate.now().year.toString() + "년 " +
+                    LocalDate.now().month.value.toString().toInt() + "월 " +
+                    LocalDate.now().dayOfMonth + "일"
         )
 
         val sqlDB: SQLiteDatabase = SQLiteDatabase.openDatabase(
@@ -87,27 +87,36 @@ open class CalendarFragment : Fragment() {
 
         var writeDay: ArrayList<CalendarDay> = ArrayList()
 
+        var year = 0
+        var month = 0
+        var day  = 0
+
         var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list;", null)
         while (cursor.moveToNext()){
 
             que = cursor.getString(cursor.getColumnIndex("ques"))
             ans = cursor.getString(cursor.getColumnIndex("ans"))
-            val year = cursor.getInt(cursor.getColumnIndex("year"))
-            val month = cursor.getInt(cursor.getColumnIndex("month"))
-            val day = cursor.getInt(cursor.getColumnIndex("day"))
+            date = cursor.getString(cursor.getColumnIndex("date"))
+            year = cursor.getInt(cursor.getColumnIndex("year"))
+            month = cursor.getInt(cursor.getColumnIndex("month"))
+            day = cursor.getInt(cursor.getColumnIndex("day"))
             state = cursor.getString(cursor.getColumnIndex("logonoff"))
-            emo = cursor.getString(cursor.getColumnIndex("secret"))
+            emo = cursor.getString(cursor.getColumnIndex("emotion"))
             pic = cursor.getString(cursor.getColumnIndex("pic"))
 
             if(year != null && (month<=12 && month >=1) && (day >= 1&& day <= 31)){
-                date = "$year" + "-" + "$month" + "-" + "$day"
                 writeDay.add(CalendarDay.from(year, month, day))
             }
 
-            if (dateView.text == date && state == "On") {
+            if (dateView.text == date && state == "On" && que.isNullOrBlank() == false) {
                 questionTextView.text = que
-                answerTextView.text = ans
-                /*if (pic != null) {
+                if (ans == null) {
+                    answerTextView.visibility = View.GONE
+                } else {
+                    answerTextView.text = ans
+                }
+
+                if (pic != null) {
                     try {
                         pic_uri = Uri.parse(pic)
                         val inputStream: InputStream? = activity?.contentResolver?.openInputStream(
@@ -118,10 +127,6 @@ open class CalendarFragment : Fragment() {
                     } catch (e: FileNotFoundException) {
                         e.printStackTrace()
                     }
-                }*/
-
-                if (answerTextView.text == null) {
-                    answerTextView.visibility = View.GONE
                 }
             }
         }
@@ -149,14 +154,36 @@ open class CalendarFragment : Fragment() {
             intent.putExtra("KEY_ANSWER", answerTextView.text.toString())
             intent.putExtra("KEY_IMAGE", byteArray)
             intent.putExtra("KEY_EMO", emo)
+            intent.putExtra("DATE", date)
             startActivity(intent)
         }
 
         //다른 날짜를 눌렀을 때
         calendarView.setOnDateChangedListener{ widget, date, selected ->
             val bitmap: Bitmap
+            dateView.text = date.year.toString() + "년 " + date.month.toString() + "월 " + date.day.toString() + "일"
 
-            dateView.text = date.year.toString() + "-" + date.month.toString() + "-" + date.day.toString()
+            if (dateView.text == this.date && state == "On" && que.isNullOrBlank() == false) {
+                questionTextView.text = que
+                if (ans == null) {
+                    answerTextView.visibility = View.GONE
+                } else {
+                    answerTextView.text = ans
+                }
+
+                if (pic != null) {
+                    try {
+                        pic_uri = Uri.parse(pic)
+                        val inputStream: InputStream? = activity?.contentResolver?.openInputStream(
+                                pic_uri
+                        )
+                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                        imageView.setImageBitmap(bitmap)
+                    } catch (e: FileNotFoundException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
         }
         cursor.close()
         sqlDB.close()

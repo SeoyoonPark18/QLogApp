@@ -33,15 +33,14 @@ class Answeractivity : AppCompatActivity()
 
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
-    lateinit var dyear : String
-    lateinit var dmonth: String
-    lateinit var dday: String
+    lateinit var date : String
     lateinit var emotion : String
     lateinit var secret : String
     lateinit var pic : String
 
-
-
+    var dyear = 0
+    var dmonth = 0
+    var dday = 0
 
 
     val gallery = 0
@@ -82,7 +81,7 @@ class Answeractivity : AppCompatActivity()
         // 해당 id의 릴레이션들에 질문, 답변, 날짜 저장
         dbManager2 = DBManager2(this, "list", null, 1)
 
-        sqlitedb = dbManager2.readableDatabase
+        sqlitedb = dbManager2.writableDatabase
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM list;", null)
 
@@ -93,20 +92,16 @@ class Answeractivity : AppCompatActivity()
         var a = answer.text.toString()
 
         while (cursor.moveToNext()) {
-            onf = cursor.getString(4)
-            idData = cursor.getString(0)
+            onf = cursor.getString(cursor.getColumnIndex("logonoff"))
+            idData = cursor.getString(cursor.getColumnIndex("id"))
 
         }
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
-            sqlitedb = dbManager2.writableDatabase
-            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$dyear', '$dmonth', '$dday', '$on', '$emotion', '$secret', '$pic')")
+            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$dyear', '$dmonth', '$dday', '$on', '$emotion', '$secret', '$pic')")
             sqlitedb.close()
 
-            var intent = Intent(this, MainActivity::class.java)
-           // intent.putExtra("count", 1)
-            startActivity(intent)
-
+            onBackPressed()
         }
 
         cursor.close()
@@ -135,11 +130,11 @@ class Answeractivity : AppCompatActivity()
         val year = intent.getStringExtra("year")
         val month = intent.getStringExtra("month")
         val day = intent.getStringExtra("day")
-        if (year != null && month != null && day != null) {
-            dyear = year
-            dmonth = month
-            dday = day
-        }
+        dyear = year!!.toInt()
+        dmonth = month!!.toInt()
+        dday = day!!.toInt()
+
+        date = "$year" +"년 " + "$month" + "월 "+ "$day" + "일"
 
        // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
@@ -174,6 +169,7 @@ class Answeractivity : AppCompatActivity()
         }
         emoBtn4.setOnClickListener {
             emotion(emoBtn4)
+
         }
 
     }
