@@ -13,7 +13,7 @@ class DBManager2(
 
     override fun onCreate(db: SQLiteDatabase?) {
 
-        db!!.execSQL("CREATE TABLE list (id text, ques text, ans text, d_year text, d_month text, d_day text, logonoff text, emotion text, secret text, pic text)")
+        db!!.execSQL("CREATE TABLE list (id TEXT, ques TEXT, ans TEXT, year INTEGER, month INTEGER, day INTEGER, logonoff TEXT, emotion TEXT, secret TEXT, pic TEXT)")
 
     }
 

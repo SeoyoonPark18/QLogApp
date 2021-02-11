@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     lateinit var writeButton : FloatingActionButton
-    lateinit var refreshButton : FloatingActionButton
     lateinit var fixQButton : FloatingActionButton
     lateinit var shareButton : FloatingActionButton
     lateinit var question : EditText
@@ -47,7 +46,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         writeButton = view.findViewById(R.id.writeButton)
-        refreshButton = view.findViewById(R.id.refreshButton)
         fixQButton = view.findViewById(R.id.fixQButton)
         shareButton = view.findViewById(R.id.shareButton)
         question = view.findViewById(R.id.questionText)
@@ -57,20 +55,22 @@ class HomeFragment : Fragment() {
         // 상단바 이름 변경
         (activity as AppCompatActivity).supportActionBar?.title = "홈"
 
-
-        var intent = Intent(getActivity(), Answeractivity::class.java)
+        val intent = Intent(getActivity(), Answeractivity::class.java)
         val cal = Calendar.getInstance()
         val year = cal.get(Calendar.YEAR).toString()
         val month = (cal.get(Calendar.MONTH)+1).toString()
         val day = cal.get(Calendar.DATE).toString()
+
         date.setText("$year" +"/" + "$month" + "/"+ "$day")
 
         writeButton.setOnClickListener{
-            intent.putExtra("question", question.getText().toString())
+            intent.putExtra("question", "Q. " + question.getText().toString())
            // intent.putExtra("cal", cal)
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
+
+
             startActivity(intent)
             var wB = Toast.makeText(view.context, "답변 입력",Toast.LENGTH_SHORT).show()
         }
@@ -92,3 +92,4 @@ class HomeFragment : Fragment() {
     }
 
 }
+

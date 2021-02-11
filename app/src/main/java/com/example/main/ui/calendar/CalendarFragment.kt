@@ -1,10 +1,14 @@
 package com.example.main.ui.calendar
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
+import android.graphics.Bitmap.CompressFormat.*
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,41 +19,51 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.main.DBManager
 import com.example.main.NextCalActivity
 import com.example.main.R
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.InputStream
 import java.time.LocalDate
-import java.util.*
 
-class CalendarFragment : Fragment() {
+
+open class CalendarFragment : Fragment() {
 
     private lateinit var calendarViewModel: CalendarViewModel
     lateinit var expansionButton: ImageButton
     lateinit var scrollText: ScrollView
-    lateinit var calendarView: CalendarView
+    lateinit var calendarView: MaterialCalendarView
     lateinit var dateView: TextView
     lateinit var questionTextView: TextView
     lateinit var answerTextView: TextView
     lateinit var imageView: ImageView
 
-    lateinit var sqlDB: SQLiteDatabase
-    lateinit var DBManager: DBManager
+    lateinit var state: String
+    lateinit var que: String
+    lateinit var ans: String
+    lateinit var emo: String
+    lateinit var pic: String
+    lateinit var pic_uri: Uri
 
     lateinit var date: String
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
         return inflater.inflate(R.layout.fragment_calendar, container, false)
     }
 
+
+    @SuppressLint("WrongThread")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         expansionButton = view.findViewById(R.id.expansionButton)
         scrollText = view.findViewById(R.id.scrollText)
         calendarView = view.findViewById(R.id.calendarView)
@@ -58,24 +72,62 @@ class CalendarFragment : Fragment() {
         answerTextView = view.findViewById(R.id.answerView)
         imageView = view.findViewById(R.id.diaryImage)
 
-        dateView.setText(LocalDate.now().year.toString() + "년 " +
-                LocalDate.now().month.value.toString().toInt() + "월 " +
-                LocalDate.now().dayOfMonth + "일")
+        calendarView.setSelectedDate(CalendarDay.today())
 
-        //sqlDB = DBManager(activity,)
+        dateView.setText(
+            LocalDate.now().year.toString() + "-" +
+                    LocalDate.now().month.value.toString().toInt() + "-" +
+                    LocalDate.now().dayOfMonth
+        )
 
-        //var cursor: Cursor
-        // cursor =
-        /*if (dateView.text == date) {
-            // 데이터 베이스 questionTextView.text
-            // 데이터 베이스 answerTextView.text
+        val sqlDB: SQLiteDatabase = SQLiteDatabase.openDatabase(
+            "/data/data/com.example.main/databases/list",
+            null, SQLiteDatabase.OPEN_READONLY
+        )
 
-            if (answerTextView.text.isBlank()) {
-                answerTextView.visibility = View.GONE
+        var writeDay: ArrayList<CalendarDay> = ArrayList()
+
+        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list;", null)
+        while (cursor.moveToNext()){
+
+            que = cursor.getString(cursor.getColumnIndex("ques"))
+            ans = cursor.getString(cursor.getColumnIndex("ans"))
+            val year = cursor.getInt(cursor.getColumnIndex("year"))
+            val month = cursor.getInt(cursor.getColumnIndex("month"))
+            val day = cursor.getInt(cursor.getColumnIndex("day"))
+            state = cursor.getString(cursor.getColumnIndex("logonoff"))
+            emo = cursor.getString(cursor.getColumnIndex("secret"))
+            pic = cursor.getString(cursor.getColumnIndex("pic"))
+
+            if(year != null && (month<=12 && month >=1) && (day >= 1&& day <= 31)){
+                date = "$year" + "-" + "$month" + "-" + "$day"
+                writeDay.add(CalendarDay.from(year, month, day))
             }
-        }*/
 
-        //nextActivity로 이미지를 넘기기 위한 부분
+            if (dateView.text == date && state == "On") {
+                questionTextView.text = que
+                answerTextView.text = ans
+                /*if (pic != null) {
+                    try {
+                        pic_uri = Uri.parse(pic)
+                        val inputStream: InputStream? = activity?.contentResolver?.openInputStream(
+                            pic_uri
+                        )
+                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                        imageView.setImageBitmap(bitmap)
+                    } catch (e: FileNotFoundException) {
+                        e.printStackTrace()
+                    }
+                }*/
+
+                if (answerTextView.text == null) {
+                    answerTextView.visibility = View.GONE
+                }
+            }
+        }
+        calendarView.addDecorator(EventDecorator(Color.BLACK, writeDay))
+
+        //extActivity로 이미지를 넘기기
         val stream = ByteArrayOutputStream()
         if (imageView.drawable != null) {
             val bitmap: Bitmap = imageView.drawable.toBitmap(390, 390)
@@ -83,43 +135,31 @@ class CalendarFragment : Fragment() {
             val image_w: Int = (bitmap.width * scale).toInt()
             val image_h: Int = (bitmap.height * scale).toInt()
             val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
-            resize.compress(CompressFormat.PNG, 100, stream)
-
+            resize.compress(PNG, 100, stream)
         } else {
             imageView.visibility = View.GONE
         }
         val byteArray: ByteArray = stream.toByteArray()
 
+        //확대버튼
         expansionButton.setOnClickListener {
             val intent = Intent(activity, NextCalActivity::class.java)
             intent.putExtra("KEY_DATE", dateView.text.toString())
             intent.putExtra("KEY_QUESTION", questionTextView.text.toString())
             intent.putExtra("KEY_ANSWER", answerTextView.text.toString())
             intent.putExtra("KEY_IMAGE", byteArray)
+            intent.putExtra("KEY_EMO", emo)
             startActivity(intent)
         }
 
-        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+        //다른 날짜를 눌렀을 때
+        calendarView.setOnDateChangedListener{ widget, date, selected ->
             val bitmap: Bitmap
-            val m: Int
-            m = month + 1
-            dateView.visibility = View.VISIBLE
-            dateView.text = year.toString() + "년 " + m.toString() + "월 " + dayOfMonth + "일"
-            if (imageView.drawable != null) {
-                bitmap = imageView.drawable.toBitmap(390, 390)
-                val scale: Float = 1024 / bitmap.width.toFloat()
-                val image_w: Int = (bitmap.width * scale).toInt()
-                val image_h: Int = (bitmap.height * scale).toInt()
-                val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
-                resize.compress(CompressFormat.PNG, 100, stream)
-            } else {
-                imageView.visibility = View.GONE
-            }
-            //데이터 베이스 추가
-            //cursor = sqlDB.rawQuery()
-            /*if (dateView.text == date){
 
-            }*/
+            dateView.text = date.year.toString() + "-" + date.month.toString() + "-" + date.day.toString()
         }
+        cursor.close()
+        sqlDB.close()
     }
+
 }

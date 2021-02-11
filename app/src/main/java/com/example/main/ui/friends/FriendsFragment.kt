@@ -90,7 +90,7 @@ class FriendsFragment : Fragment() {
 
                 //friendDB에 추가한 친구 이름 넣기
                 sqlitedb = dbManager.writableDatabase
-                sqlitedb.execSQL("INSERT INTO register VALUES ('$nameData','null','null')")
+                sqlitedb.execSQL("INSERT INTO register VALUES ('$nameData','$id','null')")
                 sqlitedb.close()
                 layout.removeAllViews()
                 show_friend()
@@ -103,7 +103,7 @@ class FriendsFragment : Fragment() {
         }
         cursor.close()
         sqlitedb.close()
-}
+    }
 
     fun check_id_del() {
         dbManager = DBManager(activity, "registerDB", null, 1)
@@ -154,6 +154,7 @@ class FriendsFragment : Fragment() {
 
         while (cursor.moveToNext()) {
             var nameData = cursor.getString(0)
+            id = cursor.getString(1)
 
             var layout_item: LinearLayout = LinearLayout(activity)
             layout_item.orientation = LinearLayout.VERTICAL
@@ -168,10 +169,9 @@ class FriendsFragment : Fragment() {
 
             layout_item.setOnClickListener {
                 val intent = Intent(getActivity(), Friend_Activity::class.java)
-                //intent.putExtra("intent_name", nameData)
+                intent.putExtra("intent_id", id)
                 startActivity(intent)
             }
-
             layout.addView(layout_item)
             num++
         }

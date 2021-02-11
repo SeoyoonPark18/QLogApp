@@ -1,5 +1,6 @@
 package com.example.main
 
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -23,7 +24,8 @@ class NextCalActivity : AppCompatActivity() {
     lateinit var actionBar: ActionBar
 
     lateinit var sqlDB: SQLiteDatabase
-    lateinit var DBManager: DBManager
+
+    lateinit var emo: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +47,12 @@ class NextCalActivity : AppCompatActivity() {
         dateTextView.text = intent.getStringExtra("KEY_DATE")
         question.text = intent.getStringExtra("KEY_QUESTION")
         answer.text = intent.getStringExtra("KEY_ANSWER")
+        emo = intent.getStringExtra("KEY_EMO").toString()
         val byteArray: ByteArray = intent.getByteArrayExtra("KEY_IMAGE")!!
+
+        sqlDB = SQLiteDatabase.openDatabase(
+            "/data/data/com.example.main/databases/list",
+            null, SQLiteDatabase.OPEN_READWRITE)
 
         if(byteArray.isNotEmpty()) {
             val bitmap: Bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
@@ -59,8 +66,12 @@ class NextCalActivity : AppCompatActivity() {
         }
 
         //emotion database
-        if (emotion.drawable == null){
-            emotion.visibility = View.GONE
+        when(emo){
+                "Happy" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_satisfied_24)
+                "Good" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
+                "Soso" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_neutral_24)
+                "Bad" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+                else -> emotion.visibility = View.GONE
         }
 
         closeButton.setOnClickListener {
@@ -69,10 +80,8 @@ class NextCalActivity : AppCompatActivity() {
 
         deleteButton.setOnClickListener {
             //데이터베이스
-            /*sqlDB = DBManager.writableDatabase
-            sqlDB.execSQL("DELETE FROM registerTBL WHERE gDate = '" + dateTextView.text.toString() + "';")
-
-            sqlDB.close()*/
+            sqlDB.execSQL("DELETE FROM list WHERE date = '" + dateTextView.text.toString() + "';")
+            sqlDB.close()
             onBackPressed()
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }
