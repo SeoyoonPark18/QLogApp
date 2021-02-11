@@ -22,6 +22,7 @@
             android:name=".Answeractivity"
             android:label="@string/title_activity_answeractivity"
             android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".NextCalActivity"
             android:label="NextCalActivity"
@@ -34,7 +35,7 @@
             android:label="UpdateSettings"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".Friend_Activity"/>
+            android:name=".Friend_Activity" />
     </application>
 
 </manifest>
