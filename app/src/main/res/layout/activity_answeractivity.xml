@@ -63,7 +63,6 @@
                     android:id="@+id/emotionButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:background="#00FFFFFF"
                     android:padding="5dp"
                     android:scaleX="1.5"

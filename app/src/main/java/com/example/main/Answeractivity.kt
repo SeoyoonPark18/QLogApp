@@ -173,6 +173,7 @@ class Answeractivity : AppCompatActivity()
         }
         emoBtn4.setOnClickListener {
             emotion(emoBtn4)
+
         }
 
     }
