@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.main">
 
-    <uses-permission android:name="com.google.Android.apps.photos.permission.GOOGLE_PHOTOS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
 
     <application
         android:allowBackup="true"
@@ -38,6 +36,8 @@
             android:name=".UpdateSettings"
             android:label="UpdateSettings"
             android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".Friend_Activity"/>
     </application>
 
 </manifest>

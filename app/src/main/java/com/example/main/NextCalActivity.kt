@@ -24,6 +24,7 @@ class NextCalActivity : AppCompatActivity() {
     lateinit var actionBar: ActionBar
 
     lateinit var sqlDB: SQLiteDatabase
+    lateinit var datesql: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +47,8 @@ class NextCalActivity : AppCompatActivity() {
         answer.text = intent.getStringExtra("KEY_ANSWER")
         var emo = intent.getStringExtra("KEY_EMO")
         var date = intent.getStringExtra("DATE")
+        var id = intent.getStringExtra("ID")
+        var dateId = intent.getStringExtra("DATEID")
         intent.extras!!
         val byteArray: ByteArray = intent.getByteArrayExtra("KEY_IMAGE")!!
 
@@ -78,8 +81,18 @@ class NextCalActivity : AppCompatActivity() {
             sqlDB = SQLiteDatabase.openDatabase(
                     "/data/data/com.example.main/databases/list",
                     null, SQLiteDatabase.OPEN_READWRITE)
-            sqlDB.execSQL("DELETE FROM list WHERE date='" + dateTextView.text + "';")
+
+            datesql = SQLiteDatabase.openDatabase(
+                    "/data/data/com.example.main/database/dateDB",
+                    null,SQLiteDatabase.OPEN_READONLY)
+
+            if (id == dateId) {
+                sqlDB.execSQL("DELETE FROM list WHERE date='" + dateTextView.text + "';")
+                datesql.execSQL("DELETE FROM date WHERE dateDB ='" + dateTextView.text + "';")
+            }
             sqlDB.close()
+            datesql.close()
+
             onBackPressed()
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
         }

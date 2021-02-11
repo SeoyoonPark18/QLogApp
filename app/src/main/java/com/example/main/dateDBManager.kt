@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DBManager2(
+class dateDBManager(
         context: Context?,
         name: String?,
         factory: SQLiteDatabase.CursorFactory?,
@@ -13,12 +13,12 @@ class DBManager2(
 
     override fun onCreate(db: SQLiteDatabase?) {
 
-        db!!.execSQL("CREATE TABLE list (id text, ques text, ans text, date text, logonoff text, emotion text, secret text, pic text)")
+        db!!.execSQL("CREATE TABLE dateDB (id TEXT, date TEXT, year INTEGER, month INTEGER, day INTEGER)")
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS list")
+        db!!.execSQL("DROP TABLE IF EXISTS dateDB")
         onCreate(db)
     }
 }
