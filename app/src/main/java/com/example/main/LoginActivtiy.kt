@@ -24,6 +24,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var pw: String
 
     lateinit var dbManager: DBManager
+
+    lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +46,13 @@ class LoginActivtiy : AppCompatActivity() {
             sqlitedb = dbManager.readableDatabase
 
             var cursor: Cursor
+
             cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
 
             var idData = ""
             var pwData = ""
+            var on = "On"
+            var add = false
 
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
@@ -58,12 +63,18 @@ class LoginActivtiy : AppCompatActivity() {
 
                 if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
+                    dbManager2 = DBManager2(this, "list", null, 1)
+                    sqlitedb = dbManager2.writableDatabase
+                    sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'null')")
+                    add = true
+                    //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
                     startActivity(intent)
-                } else {
-                    Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
                 }
             }
 
+            if(add == false) {
+                Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
+            }
             cursor.close()
             sqlitedb.close()
         }

@@ -102,7 +102,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="210dp"
         android:scaleType="centerCrop"
         android:src="@drawable/flower"
         app:layout_constraintBottom_toBottomOf="parent"
