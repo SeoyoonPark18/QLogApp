@@ -122,9 +122,6 @@ class Answeractivity : AppCompatActivity() {
             idData = cursor.getString(0)
         }
 
-        cursor.close()
-        sqlitedb.close()
-
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
 
@@ -179,17 +176,17 @@ class Answeractivity : AppCompatActivity() {
         // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
 
-        supportActionBar!!.title = "$year" + "년 " + "$month" + "월 " + "$day" + "일의 일기"
+        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
 
-        camBtn.setOnClickListener {
-            loadImage()
+        camBtn.setOnClickListener{
+            permission()
 
         }
 
-        if (intent.hasExtra("question")) {
-            ques.text = intent.getStringExtra("question")
+        if(intent.hasExtra("question")){
+            ques.text= intent.getStringExtra("question")
 
-        } else {
+        }else{
             // 질문 수정이 없었다면 설정된 질문 물어보기
             ques.text = "Q. 당신은 행복한가요? " // default
 
@@ -217,26 +214,13 @@ class Answeractivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
-        if (requestCode == gallery) {
-            if (resultCode == Activity.RESULT_OK) {
-                val selectedPhotoUri = data?.data
-                pic = selectedPhotoUri.toString()
-                try {
-                    selectedPhotoUri?.let {
-                        if (Build.VERSION.SDK_INT < 28) {
-                            photo.setImageURI(data?.data)
-                        } else {
-                            val source = ImageDecoder.createSource(this.contentResolver, selectedPhotoUri)
-                            photo.setImageURI(data?.data)
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } else {
-                Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        if(requestCode==gallery && resultCode == Activity.RESULT_OK){
+            val selectedPhotoUri = data?.data
+            photo.setImageURI(selectedPhotoUri)
+            pic = selectedPhotoUri.toString()
+        }
+        else{
+            Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
