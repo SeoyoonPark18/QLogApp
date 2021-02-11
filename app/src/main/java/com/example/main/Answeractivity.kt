@@ -98,11 +98,21 @@ class Answeractivity : AppCompatActivity()
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
             sqlitedb = dbManager2.writableDatabase
-            sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
+            //sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
+
+            sqlitedb.execSQL("UPDATE list SET ques='$q' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ans='$a' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET pic='$pic' WHERE id='$idData';")
+
+            //id text, ques text, ans text, date text, logonoff text, emotion text, secret text, pic text
             sqlitedb.close()
 
             var intent = Intent(this, MainActivity::class.java)
-           // intent.putExtra("count", 1)
+            // intent.putExtra("count", 1)
             startActivity(intent)
 
         }
@@ -140,7 +150,7 @@ class Answeractivity : AppCompatActivity()
         val day = intent.getStringExtra("day")
         date = "$year" +"년 " + "$month" + "월 "+ "$day" + "일"
 
-       // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
+        // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
 
         supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
@@ -173,6 +183,7 @@ class Answeractivity : AppCompatActivity()
         }
         emoBtn4.setOnClickListener {
             emotion(emoBtn4)
+
         }
 
     }
@@ -228,7 +239,7 @@ class Answeractivity : AppCompatActivity()
             else -> super.onOptionsItemSelected(item)
         }
     }
-    }
+}
 
 
 
