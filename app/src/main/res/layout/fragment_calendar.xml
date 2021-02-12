@@ -77,9 +77,10 @@
                 <TextView
                     android:id="@+id/questionView"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_height="50dp"
                     android:layout_marginVertical="15dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:layout_editor_absoluteY="338dp" />
 
@@ -87,16 +88,16 @@
                     android:id="@+id/answerView"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="16dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:layout_editor_absoluteX="154dp"
                     tools:layout_editor_absoluteY="476dp" />
 
                 <ImageView
                     android:id="@+id/diaryImage"
-                    android:layout_width="390dp"
-                    android:layout_height="390dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="375dp"
+                    android:layout_height="375dp"
+                    android:layout_marginHorizontal="16dp"
                     android:layout_marginVertical="10dp"
                     android:maxWidth="390dp"
                     android:maxHeight="390dp"

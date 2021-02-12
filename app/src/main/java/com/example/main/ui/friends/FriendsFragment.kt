@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.*
@@ -21,7 +22,7 @@ class FriendsFragment : Fragment() {
     lateinit var layout: LinearLayout
 
     companion object {
-        lateinit var friend_id : EditText
+        lateinit var friend_id: EditText
     }
 
     lateinit var id: String
@@ -31,16 +32,16 @@ class FriendsFragment : Fragment() {
     lateinit var sqlitedb: SQLiteDatabase
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         friendsViewModel =
-                ViewModelProvider(this).get(FriendsViewModel::class.java)
+            ViewModelProvider(this).get(FriendsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_friends, container, false)
         val sub = inflater.inflate(R.layout.dialog, container, false)
         setHasOptionsMenu(true)
-        friend_id =sub.findViewById(R.id.friend_id)
+        friend_id = sub.findViewById(R.id.friend_id)
         layout = root.findViewById(R.id.friend)
         show_friend()
         return root
@@ -53,13 +54,13 @@ class FriendsFragment : Fragment() {
 
     // 메뉴 옵션
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item?.itemId) {
+        when (item?.itemId) {
             R.id.friend_add -> {
                 dialog("친구 추가", "추가할 친구의 아이디를 입력해주세요.")
                 return true
             }
             R.id.friend_del -> {
-                dialog("친구 삭제", "삭제할 친구의 아이디를 입력해주세요.")
+                dialog("친구 삭제", "삭제할 친구의 이름을 입력해주세요.")
                 return true
             }
         }
@@ -84,7 +85,7 @@ class FriendsFragment : Fragment() {
 
             id = friend_id.text.toString()
 
-            if(id == idData) {
+            if (id == idData) {
                 nameData = cursor.getString(0)
                 dbManager = DBManager(activity, "friendDB", null, 1)
 
@@ -98,7 +99,7 @@ class FriendsFragment : Fragment() {
                 add = true
             }
         }
-        if(add == false) {
+        if (add == false) {
             Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
@@ -113,17 +114,17 @@ class FriendsFragment : Fragment() {
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
 
-        var idData: String = ""
+        var name: String = ""
         var nameData: String = ""
         var delete = false
 
         while (cursor.moveToNext()) {
-            idData = cursor.getString(1)
+            nameData = cursor.getString(0)
 
             id = friend_id.text.toString()
 
-            if(id == idData) {
-                nameData = cursor.getString(0)
+            if (id == nameData) {
+                name = cursor.getString(0)
                 dbManager = DBManager(activity, "friendDB", null, 1)
 
                 //friendDB에 추가했던 친구 이름 삭제하기
@@ -137,7 +138,7 @@ class FriendsFragment : Fragment() {
                 delete = true
             }
         }
-        if(delete == false) {
+        if (delete == false) {
             Toast.makeText(activity, "회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
         }
         cursor.close()
@@ -154,20 +155,29 @@ class FriendsFragment : Fragment() {
 
         while (cursor.moveToNext()) {
             var nameData = cursor.getString(0)
-            id = cursor.getString(1)
+            //id = cursor.getString(1)
 
             var layout_item: LinearLayout = LinearLayout(activity)
-            layout_item.orientation = LinearLayout.VERTICAL
+            layout_item.orientation = LinearLayout.HORIZONTAL
             layout_item.id = num
 
             var tvName: TextView = TextView(activity)
             tvName.text = nameData
             tvName.textSize = 25f
-            //tvName.setBackgroundColor(Color.parseColor("#A3B9E0"))
+            tvName.setPadding(20,0,0,0)
             tvName.setTextColor(Color.GRAY)
             layout_item.addView(tvName)
 
+            var tvImageView: ImageView = ImageView(activity)
+            tvImageView.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24)
+            tvImageView.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvImageView.setPadding(700,0,0,0)
+            tvImageView.baselineAlignBottom
+            layout_item.addView(tvImageView)
+
             layout_item.setOnClickListener {
+                var change_id = layout_item.id
+                id = change_id(change_id)
                 val intent = Intent(getActivity(), Friend_Activity::class.java)
                 intent.putExtra("intent_id", id)
                 startActivity(intent)
@@ -179,6 +189,25 @@ class FriendsFragment : Fragment() {
         sqlitedb.close()
         dbManager.close()
 
+    }
+
+    // 친구가 선택됐을 때 친구의 id 값을 얻어오는 함수
+    fun change_id(int: Int): String {
+        dbManager = DBManager(activity, "friendDB", null, 1)
+        sqlitedb = dbManager.readableDatabase
+        var cursor: Cursor
+        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+        var count: Int = 0
+        var s_id = ""
+
+        while (cursor.moveToNext()) {
+            if(int == count) {
+                s_id = cursor.getString(1)
+                break
+            }
+            count++
+        }
+        return s_id
     }
 
     // 친구 추가 다이얼로그 창에서 확인버튼을 눌렀을 때 check_id_add() 호출

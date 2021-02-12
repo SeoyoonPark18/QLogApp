@@ -3,13 +3,17 @@ package com.example.main
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteStatement
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -18,6 +22,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class Answeractivity : AppCompatActivity() {
@@ -39,7 +45,8 @@ class Answeractivity : AppCompatActivity() {
     lateinit var date: String
     lateinit var emotion: String
     lateinit var secret: String
-    lateinit var pic: String
+    lateinit var pic: ContentValues
+    lateinit var picbyte: ByteArray
 
     lateinit var year: String
     lateinit var month: String
@@ -135,7 +142,10 @@ class Answeractivity : AppCompatActivity() {
             sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET pic='$pic' WHERE id='$idData';")
+            var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=?;")
+            p.bindBlob(1, picbyte)
+            p.bindString(2, idData)
+            p.execute()
 
             dateSQL.execSQL("INSERT INTO dateDB VALUES ('$idData', '$date','$year', '$month', '$day')")
             dateSQL.close()
@@ -163,7 +173,7 @@ class Answeractivity : AppCompatActivity() {
         photo = findViewById(R.id.photoview)
         answer = findViewById(R.id.answers)
         secret = "public"
-        pic = "none"
+        picbyte = byteArrayOf(2)
         emotion = "none"
 
 
@@ -217,7 +227,15 @@ class Answeractivity : AppCompatActivity() {
         if(requestCode==gallery && resultCode == Activity.RESULT_OK){
             val selectedPhotoUri = data?.data
             photo.setImageURI(selectedPhotoUri)
-            pic = selectedPhotoUri.toString()
+            var bitmap: Bitmap = MediaStore.Images.Media.getBitmap(photo.context.contentResolver, selectedPhotoUri)
+            var stream = ByteArrayOutputStream()
+            var width = 350
+            var height = bitmap.height*350/bitmap.width
+            if (bitmap.width > 400) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height,true)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream)
+            }
+            picbyte = stream.toByteArray()
         }
         else{
             Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()

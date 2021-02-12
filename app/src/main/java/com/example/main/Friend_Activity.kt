@@ -39,13 +39,25 @@ class Friend_Activity : AppCompatActivity()  {
         dbManager = DBManager(this, "list", null, 1)
         sqlitedb = dbManager.readableDatabase
 
+        var check = false
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM list WHERE id = '" + str_id + "';", null)
 
-        if(cursor.moveToNext()) {
+        if( cursor.moveToNext()) {
             str_date = cursor.getString(cursor.getColumnIndex("date")).toString()
             str_question = cursor.getString(cursor.getColumnIndex("ques")).toString()
             str_answer = cursor.getString(cursor.getColumnIndex("ans")).toString()
+            check = true
+        }
+
+        if(cursor.getString(cursor.getColumnIndex("date")).toString() == "null") {
+            str_date = " "
+        }
+        if(cursor.getString(cursor.getColumnIndex("ques")).toString() == "null") {
+            str_question = " "
+        }
+        if(cursor.getString(cursor.getColumnIndex("ans")).toString() == "null") {
+            str_answer = "기록이 없습니다."
         }
 
         cursor.close()
