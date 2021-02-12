@@ -45,8 +45,9 @@ class RegisterActivity : AppCompatActivity() {
             sqlitedb.execSQL("INSERT INTO register VALUES ('"+str_name+"','"+str_id+"','"+str_pw+"')")
             dbManager2 = DBManager2(this, "list", null, 1)
             sqldb = dbManager2.writableDatabase
-            sqldb.execSQL("INSERT INTO list id values $str_id;")
+            sqldb.execSQL("INSERT INTO list VALUES ('$str_id', 'null', 'null', 'null', 'null', 'null', 'null', 'none')")
             sqlitedb.close()
+            sqldb.close()
 
             val intent = Intent(this, LoginActivtiy::class.java)
             startActivity(intent)
