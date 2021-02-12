@@ -18,20 +18,18 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var edtPw: EditText
 
     lateinit var btnRegister: Button
-    lateinit var actionBar : ActionBar
+    lateinit var actionBar: ActionBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        actionBar = supportActionBar!!
+        actionBar.hide()
 
         btnRegister = findViewById(R.id.btnRegister)
         edtName = findViewById(R.id.edtName)
         edtId = findViewById(R.id.edtId)
         edtPw = findViewById(R.id.edtPw)
-
-        actionBar = supportActionBar!!
-        actionBar.hide()
-
 
         dbManager = DBManager(this, "registerDB", null, 1)
 

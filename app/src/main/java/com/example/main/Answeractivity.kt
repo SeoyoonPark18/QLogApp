@@ -27,32 +27,32 @@ import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class Answeractivity : AppCompatActivity() {
-    lateinit var ques: TextView
-    lateinit var camBtn: ImageButton
+    lateinit var ques: TextView // 질문
+    lateinit var camBtn: ImageButton // 사진
 
-    lateinit var emoBtn1: ImageButton
+    lateinit var emoBtn1: ImageButton // 감정 버튼
     lateinit var emoBtn2: ImageButton
     lateinit var emoBtn3: ImageButton
     lateinit var emoBtn4: ImageButton
 
-    lateinit var answer: EditText
+    lateinit var answer: EditText // 답변 버튼
 
-    lateinit var photo: ImageView
+    lateinit var photo: ImageView // 사진을 출력할 뷰
 
-    lateinit var dbManager2: DBManager2
+    lateinit var dbManager2: DBManager2 // 데이터베이스 매니저
     lateinit var dateDBManager: dateDBManager
     lateinit var sqlitedb: SQLiteDatabase
-    lateinit var date: String
+
+    lateinit var date: String // 날짜, 감정, 공개/비공개, 사진 변수
     lateinit var emotion: String
     lateinit var secret: String
-    lateinit var pic: ContentValues
     lateinit var picbyte: ByteArray
 
     lateinit var year: String
     lateinit var month: String
     lateinit var day : String
 
-    private fun permission(){
+    private fun permission(){ // 사진 버튼을 클릭했을 시 권한 여부
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                 var dlg = AlertDialog.Builder(this)
@@ -67,8 +67,8 @@ class Answeractivity : AppCompatActivity() {
                         1000)
             }
         }
-        else {
-            loadImage()
+        else { // 권한이 잘 적용 되었다면
+            loadImage() // 사진 불러오기
         }
     }
 
@@ -78,40 +78,34 @@ class Answeractivity : AppCompatActivity() {
 
         val intent_cam = Intent(Intent.ACTION_PICK)
         intent_cam.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        startActivityForResult(intent_cam, gallery)
+        startActivityForResult(intent_cam, gallery) // 외부저장소로부터 사진 받아옴
     }
 
     private fun emotion(emo: ImageButton) {
-        when (emo) {
+        when (emo) { // 누른 감정 버튼에 따라 감정 변수의 string 지정
             emoBtn1 -> {
-                //happy 데이터베이스에 저장
                 emotion = "Happy"
                 Toast.makeText(this, "Happy", Toast.LENGTH_SHORT).show()
             }
             emoBtn2 -> {
-                //good 데이터베이스에 저장
                 emotion = "Good"
                 Toast.makeText(this, "Good", Toast.LENGTH_SHORT).show()
             }
             emoBtn3 -> {
-                //soso 데이터베이스에 저장
                 emotion = "Soso"
                 Toast.makeText(this, "Soso", Toast.LENGTH_SHORT).show()
             }
             emoBtn4 -> {
-                //bad 데이터베이스에 저장
                 emotion = "Bad"
                 Toast.makeText(this, "Bad", Toast.LENGTH_SHORT).show()
             }
-            else -> {
-            }
+
         }
     }
 
     private fun save() {
         // register db에서 찾아서
-        // id랑 동일한거 찾은 후
-        // 해당 id의 릴레이션들에 질문, 답변, 날짜 저장
+        // 해당 id와 동일한 튜플 찾은 후 질문, 답변, 날짜 저장
         dbManager2 = DBManager2(this, "list", null, 1)
 
         sqlitedb = dbManager2.readableDatabase
@@ -121,23 +115,21 @@ class Answeractivity : AppCompatActivity() {
         var on = "On"
         var idData = ""
         var onf = ""
-        var q = ques.text.toString()
-        var a = answer.text.toString()
 
         while (cursor.moveToNext()) {
             onf = cursor.getString(4)
             idData = cursor.getString(0)
         }
 
-        if (onf == on) { // 로그인 상태라면
+        if (onf == on) { // 로그인 상태인 회원 찾아 값 저장
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
 
             dateDBManager = dateDBManager(this, "dateDB", null, 1)
             sqlitedb = dbManager2.writableDatabase
             var dateSQL : SQLiteDatabase = dateDBManager.readableDatabase
 
-            sqlitedb.execSQL("UPDATE list SET ques='$q' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET ans='$a' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
@@ -151,7 +143,6 @@ class Answeractivity : AppCompatActivity() {
             dateSQL.close()
 
             var intent = Intent(this, MainActivity::class.java)
-            // intent.putExtra("count", 1)
             startActivity(intent)
 
         }
@@ -183,30 +174,26 @@ class Answeractivity : AppCompatActivity() {
 
         date = "$year" + "년 " + "$month" + "월 " + "$day" + "일"
 
-        // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
-
-
-        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
+        supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기" // 타이틀바 수정
 
         camBtn.setOnClickListener{
-            permission()
+            permission() // 카메라 버튼 클릭시 권한 여부 우선 체크
 
         }
 
-        if(intent.hasExtra("question")){
-            ques.text= intent.getStringExtra("question")
+        if(intent.hasExtra("question")){ // 변경된 질문이 있다면
+            ques.text= intent.getStringExtra("question") // 변경된 값으로 질문 저장
 
         }else{
-            // 질문 수정이 없었다면 설정된 질문 물어보기
+            // 질문 수정이 없었다면 디폴트 질문 물어보기
             ques.text = "Q. 당신은 행복한가요? " // default
 
         }
 
 
-
+        // 감정 버튼 클릭 시
         emoBtn1.setOnClickListener {
             emotion(emoBtn1)
-            //db (아래 동일)
         }
         emoBtn2.setOnClickListener {
             emotion(emoBtn2)
@@ -224,6 +211,7 @@ class Answeractivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // 사진 불러오기
         if(requestCode==gallery && resultCode == Activity.RESULT_OK){
             val selectedPhotoUri = data?.data
             photo.setImageURI(selectedPhotoUri)
