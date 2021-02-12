@@ -17,6 +17,7 @@
         android:gravity="center"
         android:inputType="textPersonName"
         android:text="당신은 행복한가요?"
+        android:textSize="23sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
