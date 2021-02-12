@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentActivity
 import com.example.main.ui.calendar.CalendarFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-private const val REQUEST_MSG_CODE = 1
 
 class NextCalActivity : AppCompatActivity() {
     lateinit var closeButton: ImageButton
@@ -51,7 +50,7 @@ class NextCalActivity : AppCompatActivity() {
         diaryImageView = findViewById(R.id.diaryImageView)
         emotion = findViewById(R.id.emotion)
 
-        dbManager2 = DBManager2(this, "list", null, 2)
+        dbManager2 = DBManager2(this, "list", null, 1)
         dateDBManager = dateDBManager(this, "dateDB", null, 1)
 
         dateTextView.text = intent.getStringExtra("KEY_DATE")
@@ -95,41 +94,47 @@ class NextCalActivity : AppCompatActivity() {
             var month = 0
             var day = 0
 
-            datesql = dateDBManager.writableDatabase
+            datesql = dateDBManager.readableDatabase
             var cursor:Cursor = datesql.rawQuery("SELECT * FROM dateDB WHERE date='{${dateTextView.text}';", null)
             while (cursor.moveToNext()){
                 year = cursor.getInt(cursor.getColumnIndex("year"))
                 month = cursor.getInt(cursor.getColumnIndex("month"))
                 day = cursor.getInt(cursor.getColumnIndex("day"))
             }
-            sqlDB = dbManager2.writableDatabase
-            question.text = ""
-            answer.text = ""
-            emotion.visibility = View.GONE
+
+            var que = ""
+            var ans = ""
+            var pho = ""
+            var emo = ""
+            var date = ""
+            var Date = ""
 
             if (id == dateId) {
-                sqlDB.execSQL("UPDATE list SET ques= 0 WHERE date='${dateTextView.text}';")
-                sqlDB.execSQL("UPDATE list SET ans= 0 WHERE date='${dateTextView.text}';")
-                sqlDB.execSQL("UPDATE list SET pic= 0 WHERE date='${dateTextView.text}';")
-                sqlDB.execSQL("UPDATE list SET emotion = 0 WHERE date = '${dateTextView}';'")
-                sqlDB.execSQL("UPDATE list SET date= 0 WHERE date = '${id}';'")
-                datesql.execSQL("DELETE FROM dateDB WHERE date ='" + dateTextView.text + "';")
+                que = "UPDATE list SET ques= 0 WHERE date='${dateTextView.text}';"
+                ans = "UPDATE list SET ans= 0 WHERE date='${dateTextView.text}';"
+                pho = "UPDATE list SET pic= 0 WHERE date='${dateTextView.text}';"
+                emo ="UPDATE list SET emotion = 0 WHERE date = '${dateTextView}';"
+                date = "UPDATE list SET date= 0 WHERE date = '${id}';'"
+                Date = "DELETE FROM dateDB WHERE date ='${dateTextView.text}';"
             }
 
             var intent = Intent()
-            intent.putExtra("reque", question.text)
-            intent.putExtra("reans", answer.text)
+            intent.putExtra("que", que)
+            intent.putExtra("ans", ans)
+            intent.putExtra("pho", pho)
+            intent.putExtra("emo", emo)
+            intent.putExtra("date", date)
+            intent.putExtra("date", Date)
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
-            CalendarFragment::imageView.set(CalendarFragment(),diaryImageView)
-
-            onActivityResult(REQUEST_MSG_CODE, RESULT_OK, intent)
 
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
 
-            sqlDB.close()
             datesql.close()
+
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
 }

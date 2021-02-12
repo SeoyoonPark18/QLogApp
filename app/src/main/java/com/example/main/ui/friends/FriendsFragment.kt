@@ -6,10 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.drm.DrmStore
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.view.marginRight
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -84,6 +86,7 @@ class FriendsFragment : Fragment() {
             idData = cursor.getString(1)
 
             id = friend_id.text.toString()
+
 
             if (id == idData) {
                 nameData = cursor.getString(0)
@@ -161,19 +164,22 @@ class FriendsFragment : Fragment() {
             layout_item.orientation = LinearLayout.HORIZONTAL
             layout_item.id = num
 
+
+            var tvImageView: ImageView = ImageView(activity)
+            tvImageView.setImageResource(R.drawable.ic_baseline_face_24)
+            tvImageView.setPadding(0,5,0,0)
+            tvImageView.baselineAlignBottom
+            tvImageView.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            layout_item.addView(tvImageView)
+
+
             var tvName: TextView = TextView(activity)
             tvName.text = nameData
             tvName.textSize = 25f
-            tvName.setPadding(20,0,0,0)
+            tvName.setPadding(10,0,0,0)
             tvName.setTextColor(Color.GRAY)
             layout_item.addView(tvName)
 
-            var tvImageView: ImageView = ImageView(activity)
-            tvImageView.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24)
-            tvImageView.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            tvImageView.setPadding(700,0,0,0)
-            tvImageView.baselineAlignBottom
-            layout_item.addView(tvImageView)
 
             layout_item.setOnClickListener {
                 var change_id = layout_item.id

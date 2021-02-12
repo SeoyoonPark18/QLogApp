@@ -209,11 +209,11 @@ open class CalendarFragment : Fragment() {
 
         //다른 날짜를 눌렀을 때
         calendarView.setOnDateChangedListener { widget, date, selected ->
-
             dateView.text =
                 date.year.toString() + "년 " + date.month.toString() + "월 " + date.day.toString() + "일"
-            widget.StateBuilder()
-            setData()
+
+            if ((widget.selectedDate?.year.toString() + "년 " + widget.selectedDate?.month.toString() + "월 "+ widget.selectedDate?.day.toString() + "일")==dateView.text)
+                setData()
         }
     }
 
@@ -221,12 +221,42 @@ open class CalendarFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_MSG_CODE) {
             if (resultCode == RESULT_OK) {
-                data?.getStringExtra("reque")
-                data?.getStringExtra("reans")
+                var que = data?.getStringExtra("que")
+                var ans = data?.getStringExtra("ans")
+                var pic = data?.getStringExtra("pho")
+                var emo = data?.getStringExtra("emo")
+                var date = data?.getStringExtra("date")
+                var Date = data?.getStringExtra("Date")
                 var year = data?.getStringExtra("year")?.toInt()
-                var month = data?.getStringExtra("momth")?.toInt()
+                var month = data?.getStringExtra("month")?.toInt()
                 var day = data?.getStringExtra("day")?.toInt()
-                writeDay.remove(CalendarDay.from(year!!, month!!, day!!))
+                writeDay.removeAll(listOf(CalendarDay.from(year!!, month!!, day!!)))
+
+                DBManager2 = DBManager2(activity, "list",  null, 1)
+                sqlDB = DBManager2.writableDatabase
+
+                sqlDB.rawQuery(que, null)
+                sqlDB.rawQuery(ans, null)
+                sqlDB.rawQuery(pic, null)
+                sqlDB.rawQuery(emo, null)
+                sqlDB.rawQuery(date, null)
+
+                sqlDB.close()
+
+                dateDBManager = dateDBManager(activity, "dateDB", null, 1)
+                datesql = dateDBManager.writableDatabase
+
+                datesql.rawQuery("$Date", null)
+
+                datesql.close()
+
+                questionTextView.text = ""
+                questionTextView.visibility = View.GONE
+                answerTextView.text = ""
+                answerTextView.visibility = View.GONE
+
+                imageView.setImageDrawable(null)
+                imageView.visibility = View.GONE
             }
         }
     }

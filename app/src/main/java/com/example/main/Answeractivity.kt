@@ -45,7 +45,6 @@ class Answeractivity : AppCompatActivity() {
     lateinit var date: String
     lateinit var emotion: String
     lateinit var secret: String
-    lateinit var pic: ContentValues
     lateinit var picbyte: ByteArray
 
     lateinit var year: String
@@ -121,8 +120,6 @@ class Answeractivity : AppCompatActivity() {
         var on = "On"
         var idData = ""
         var onf = ""
-        var q = ques.text.toString()
-        var a = answer.text.toString()
 
         while (cursor.moveToNext()) {
             onf = cursor.getString(4)
@@ -136,8 +133,8 @@ class Answeractivity : AppCompatActivity() {
             sqlitedb = dbManager2.writableDatabase
             var dateSQL : SQLiteDatabase = dateDBManager.readableDatabase
 
-            sqlitedb.execSQL("UPDATE list SET ques='$q' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET ans='$a' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData';")
+            sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")

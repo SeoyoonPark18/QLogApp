@@ -16,6 +16,18 @@
     </ScrollView>
 
     <item
+        android:id="@+id/group"
+        android:title="@string/group">
+        <menu>
+            <item
+                android:id="@+id/group_add"
+                android:title="@string/group_add" />
+            <item
+                android:id="@+id/group_del"
+                android:title="@string/group_del" />
+        </menu>
+    </item>
+    <item
         android:id="@+id/friend_add"
         android:title="@string/friend_add" />
     <item

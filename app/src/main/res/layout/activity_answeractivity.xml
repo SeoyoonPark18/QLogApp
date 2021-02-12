@@ -126,9 +126,10 @@
             <ImageView
                 android:id="@+id/photoview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:minHeight="390dp"
+                android:maxHeight="390dp"
+                android:scaleType="fitCenter"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <EditText

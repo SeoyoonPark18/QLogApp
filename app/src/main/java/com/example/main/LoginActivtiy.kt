@@ -28,6 +28,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
+    lateinit var sqldb: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -64,9 +66,8 @@ class LoginActivtiy : AppCompatActivity() {
                 if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
                     dbManager2 = DBManager2(this, "list", null, 1)
-                    sqlitedb = dbManager2.writableDatabase
-                    var binary = 2
-                    sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', '${binary.toByte()}')")
+                    sqldb = dbManager2.writableDatabase
+                    sqldb.execSQL("INSERT INTO list (id, secret) vales ($id, $on);")
                     add = true
                     //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
                     startActivity(intent)
@@ -78,6 +79,7 @@ class LoginActivtiy : AppCompatActivity() {
             }
             cursor.close()
             sqlitedb.close()
+            sqldb.close()
         }
 
         btnToRegister.setOnClickListener {
