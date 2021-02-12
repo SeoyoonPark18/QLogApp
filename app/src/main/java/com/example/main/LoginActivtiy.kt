@@ -65,14 +65,15 @@ class LoginActivtiy : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     dbManager2 = DBManager2(this, "list", null, 1)
                     sqlitedb = dbManager2.writableDatabase
-                    sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'null')")
-                    add = true
+
+                    sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'none')")
                     //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
+                    add = true
                     startActivity(intent)
                 }
             }
 
-            if(add == false) {
+            if(add == false){
                 Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
             }
             cursor.close()
