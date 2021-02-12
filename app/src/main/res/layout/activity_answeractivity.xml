@@ -63,6 +63,7 @@
                     android:id="@+id/emotionButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:background="#00FFFFFF"
                     android:padding="5dp"
                     android:scaleX="1.5"
@@ -125,8 +126,10 @@
             <ImageView
                 android:id="@+id/photoview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:maxHeight="390dp"
+                android:scaleType="fitCenter"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <EditText

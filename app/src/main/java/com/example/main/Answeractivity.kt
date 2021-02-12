@@ -3,14 +3,17 @@ package com.example.main
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteStatement
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -19,33 +22,38 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.main.ui.home.HomeFragment
+import androidx.core.graphics.drawable.toBitmap
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class Answeractivity : AppCompatActivity()
-{
-    lateinit var ques : TextView
-    lateinit var camBtn : ImageButton
+class Answeractivity : AppCompatActivity() {
+    lateinit var ques: TextView
+    lateinit var camBtn: ImageButton
 
-    lateinit var emoBtn1 : ImageButton
-    lateinit var emoBtn2 : ImageButton
-    lateinit var emoBtn3 : ImageButton
-    lateinit var emoBtn4 : ImageButton
+    lateinit var emoBtn1: ImageButton
+    lateinit var emoBtn2: ImageButton
+    lateinit var emoBtn3: ImageButton
+    lateinit var emoBtn4: ImageButton
 
-    lateinit var answer : EditText
+    lateinit var answer: EditText
 
-    lateinit var photo : ImageView
+    lateinit var photo: ImageView
 
     lateinit var dbManager2: DBManager2
+    lateinit var dateDBManager: dateDBManager
     lateinit var sqlitedb: SQLiteDatabase
-    lateinit var date : String
-    lateinit var emotion : String
-    lateinit var secret : String
-    lateinit var pic : String
+    lateinit var date: String
+    lateinit var emotion: String
+    lateinit var secret: String
+    lateinit var pic: ContentValues
+    lateinit var picbyte: ByteArray
 
+    lateinit var year: String
+    lateinit var month: String
+    lateinit var day : String
 
     private fun permission(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                 var dlg = AlertDialog.Builder(this)
                 dlg.setTitle("권한이 필요한 이유")
@@ -56,7 +64,7 @@ class Answeractivity : AppCompatActivity()
                 dlg.show()
             }else{
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                1000)
+                        1000)
             }
         }
         else {
@@ -72,8 +80,9 @@ class Answeractivity : AppCompatActivity()
         intent_cam.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         startActivityForResult(intent_cam, gallery)
     }
-    private fun emotion(emo: ImageButton){
-        when(emo){
+
+    private fun emotion(emo: ImageButton) {
+        when (emo) {
             emoBtn1 -> {
                 //happy 데이터베이스에 저장
                 emotion = "Happy"
@@ -98,7 +107,8 @@ class Answeractivity : AppCompatActivity()
             }
         }
     }
-    private fun save(){
+
+    private fun save() {
         // register db에서 찾아서
         // id랑 동일한거 찾은 후
         // 해당 id의 릴레이션들에 질문, 답변, 날짜 저장
@@ -117,12 +127,14 @@ class Answeractivity : AppCompatActivity()
         while (cursor.moveToNext()) {
             onf = cursor.getString(4)
             idData = cursor.getString(0)
-
         }
+
         if (onf == on) { // 로그인 상태라면
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
+
+            dateDBManager = dateDBManager(this, "dateDB", null, 1)
             sqlitedb = dbManager2.writableDatabase
-            //sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', '$q', '$a', '$date', '$on', '$emotion', '$secret', '$pic')")
+            var dateSQL : SQLiteDatabase = dateDBManager.readableDatabase
 
             sqlitedb.execSQL("UPDATE list SET ques='$q' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET ans='$a' WHERE id='$idData';")
@@ -130,27 +142,23 @@ class Answeractivity : AppCompatActivity()
             sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET pic='$pic' WHERE id='$idData';")
+            var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=?;")
+            p.bindBlob(1, picbyte)
+            p.bindString(2, idData)
+            p.execute()
 
-            //id text, ques text, ans text, date text, logonoff text, emotion text, secret text, pic text
-            sqlitedb.close()
+            dateSQL.execSQL("INSERT INTO dateDB VALUES ('$idData', '$date','$year', '$month', '$day')")
+            dateSQL.close()
 
             var intent = Intent(this, MainActivity::class.java)
-           // intent.putExtra("count", 1)
+            // intent.putExtra("count", 1)
             startActivity(intent)
 
         }
-        else{
-
-        }
-
-
 
         cursor.close()
         sqlitedb.close()
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,16 +173,17 @@ class Answeractivity : AppCompatActivity()
         photo = findViewById(R.id.photoview)
         answer = findViewById(R.id.answers)
         secret = "public"
-        pic = "none"
+        picbyte = byteArrayOf(2)
         emotion = "none"
 
 
-        val year = intent.getStringExtra("year")
-        val month = intent.getStringExtra("month")
-        val day = intent.getStringExtra("day")
-        date = "$year" +"년 " + "$month" + "월 "+ "$day" + "일"
+        year = intent.getStringExtra("year").toString()
+        month = intent.getStringExtra("month").toString()
+        day = intent.getStringExtra("day").toString()
 
-       // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
+        date = "$year" + "년 " + "$month" + "월 " + "$day" + "일"
+
+        // id를 intent로 받지 말고 login logoff 여부 체크해서 login 되어잇는 사람의 id 데베에서 끌어옴
 
 
         supportActionBar!!.title = "$year" +"년 " + "$month" + "월 "+ "$day" + "일의 일기"
@@ -218,18 +227,27 @@ class Answeractivity : AppCompatActivity()
         if(requestCode==gallery && resultCode == Activity.RESULT_OK){
             val selectedPhotoUri = data?.data
             photo.setImageURI(selectedPhotoUri)
-            pic = selectedPhotoUri.toString()
+            var bitmap: Bitmap = MediaStore.Images.Media.getBitmap(photo.context.contentResolver, selectedPhotoUri)
+            var stream = ByteArrayOutputStream()
+            var width = 350
+            var height = bitmap.height*350/bitmap.width
+            if (bitmap.width > 400) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height,true)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream)
+            }
+            picbyte = stream.toByteArray()
         }
         else{
             Toast.makeText(this, "사진을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
         }
-
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.private_menu, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.ans_private -> {
@@ -250,7 +268,7 @@ class Answeractivity : AppCompatActivity()
             else -> super.onOptionsItemSelected(item)
         }
     }
-    }
+}
 
 
 

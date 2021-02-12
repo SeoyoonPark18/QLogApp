@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="edtNewId" type="id" />
+    <item name="btnConfirmId" type="id" />
+    <item name="btnUpdate" type="id" />
+</resources>
