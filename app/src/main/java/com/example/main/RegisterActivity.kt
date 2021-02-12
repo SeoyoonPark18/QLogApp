@@ -20,6 +20,9 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var btnRegister: Button
     lateinit var actionBar: ActionBar
 
+    lateinit var dbManager2: DBManager2
+    lateinit var sqldb: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -33,6 +36,7 @@ class RegisterActivity : AppCompatActivity() {
 
         dbManager = DBManager(this, "registerDB", null, 1)
 
+        //회원가입 데이터 저장 (이름,아이디,비밀번호)
         btnRegister.setOnClickListener {
             var str_name: String = edtName.text.toString()
             var str_id: String = edtId.text.toString()
@@ -40,7 +44,11 @@ class RegisterActivity : AppCompatActivity() {
 
             sqlitedb = dbManager.writableDatabase
             sqlitedb.execSQL("INSERT INTO register VALUES ('"+str_name+"','"+str_id+"','"+str_pw+"')")
+            dbManager2 = DBManager2(this, "list", null, 1)
+            sqldb = dbManager2.writableDatabase
+            sqldb.execSQL("INSERT INTO list VALUES ('$str_id', 'null', 'null', 'null', 'null', 'null', 'null', 'none')")
             sqlitedb.close()
+            sqldb.close()
 
             val intent = Intent(this, LoginActivtiy::class.java)
             startActivity(intent)

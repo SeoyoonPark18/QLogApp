@@ -28,6 +28,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
+    lateinit var sqldb: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -42,6 +44,7 @@ class LoginActivtiy : AppCompatActivity() {
 
         dbManager = DBManager(this, "registerDB", null, 1)
 
+        //회원가입 데이터 조회하여 로그인
         btnLogin.setOnClickListener {
             sqlitedb = dbManager.readableDatabase
 
@@ -54,6 +57,7 @@ class LoginActivtiy : AppCompatActivity() {
             var on = "On"
             var add = false
 
+            //이동한 cursor가 id, pw 정보와 동일하면 로그인 성공 & 홈 화면으로 이동
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
                 pwData = cursor.getString(2)
@@ -63,21 +67,25 @@ class LoginActivtiy : AppCompatActivity() {
 
                 if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
-                    dbManager2 = DBManager2(this, "list", null, 1)
-                    sqlitedb = dbManager2.writableDatabase
 
-                    sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'none')")
-                    //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
+                    //답변 정보 저장위한 list 데이터베이스 삽입
+                    dbManager2 = DBManager2(this, "list", null, 1)
+                    sqldb = dbManager2.writableDatabase
+                    //sqldb.execSQL("INSERT INTO list (id, logonoff) values ($id, $on);")
+                    sqldb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
                     add = true
+                    //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
                     startActivity(intent)
                 }
             }
 
-            if(add == false){
+            //로그인 실패 시 경고문구 //회원가입 화면으로 이동
+            if(add == false) {
                 Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
             }
             cursor.close()
             sqlitedb.close()
+            sqldb.close()
         }
 
         btnToRegister.setOnClickListener {

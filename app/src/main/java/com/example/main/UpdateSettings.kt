@@ -34,6 +34,7 @@ class UpdateSettings : AppCompatActivity() {
         edtNewPw = findViewById(R.id.edtNewPw)
         btnConfirmPw = findViewById(R.id.btnConfirmPw)
 
+        //아이디 확인 후, 이름을 변경
         btnConfirmName.setOnClickListener {
             sqlDB = dbManager.writableDatabase
             sqlDB.execSQL("UPDATE register SET name = " + edtNewName.text +" WHERE id = '"
@@ -41,6 +42,7 @@ class UpdateSettings : AppCompatActivity() {
             sqlDB.close()
             Toast.makeText(applicationContext, "수정됨", Toast.LENGTH_SHORT).show()
         }
+        //아이디 확인 후, 비밀번호 변경
         btnConfirmPw.setOnClickListener {
             sqlDB = dbManager.writableDatabase
             sqlDB.execSQL("UPDATE register SET pw = " + edtNewPw.text +" WHERE id = '"

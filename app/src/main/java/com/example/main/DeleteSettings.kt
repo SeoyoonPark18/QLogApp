@@ -25,6 +25,7 @@ class DeleteSettings : AppCompatActivity() {
         edtExistId = findViewById(R.id.edtExistId)
         btnConfirmDelete = findViewById(R.id.btnConfirmDelete)
 
+        //아이디 확인 후 데이터 삭제
         btnConfirmDelete.setOnClickListener {
             sqlDB = dbManager.writableDatabase
             sqlDB.execSQL("DELETE FROM register WHERE id = '" + edtExistId.text.toString() +"';")
