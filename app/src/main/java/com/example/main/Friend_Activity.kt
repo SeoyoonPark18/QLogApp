@@ -39,7 +39,6 @@ class Friend_Activity : AppCompatActivity()  {
         dbManager = DBManager(this, "list", null, 1)
         sqlitedb = dbManager.readableDatabase
 
-        var check = false
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM list WHERE id = '" + str_id + "';", null)
 
@@ -47,7 +46,6 @@ class Friend_Activity : AppCompatActivity()  {
             str_date = cursor.getString(cursor.getColumnIndex("date")).toString()
             str_question = cursor.getString(cursor.getColumnIndex("ques")).toString()
             str_answer = cursor.getString(cursor.getColumnIndex("ans")).toString()
-            check = true
         }
 
         if(cursor.getString(cursor.getColumnIndex("date")).toString() == "null") {

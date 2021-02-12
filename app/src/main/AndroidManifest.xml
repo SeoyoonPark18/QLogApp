@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Main">
+        <activity android:name=".DeleteSettings"></activity>
         <activity android:name=".LoginActivtiy">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,25 +18,23 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-
         <activity
             android:name=".Answeractivity"
             android:label="@string/title_activity_answeractivity"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".NextCalActivity"
             android:label="NextCalActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".UpdateSettings"
             android:label="UpdateSettings"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Friend_Activity" />
+            android:name=".Friend_Activity"/>
     </application>
 
 </manifest>
