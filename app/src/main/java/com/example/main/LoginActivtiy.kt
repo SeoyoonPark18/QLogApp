@@ -67,7 +67,7 @@ class LoginActivtiy : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     dbManager2 = DBManager2(this, "list", null, 1)
                     sqldb = dbManager2.writableDatabase
-                    sqldb.execSQL("INSERT INTO list (id, secret) vales ($id, $on);")
+                    sqldb.execSQL("INSERT INTO list (id, logonoff) values ($id, $on);")
                     add = true
                     //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
                     startActivity(intent)
