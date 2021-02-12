@@ -14,6 +14,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="380dp"
+        android:layout_gravity="center"
         app:mcv_calendarMode="month"
         app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
         app:mcv_firstDayOfWeek="sunday"
@@ -23,6 +24,7 @@
         app:mcv_showOtherDates="defaults"
         app:mcv_tileHeight="match_parent"
         app:mcv_tileSize="match_parent"
+        app:mcv_tileWidth="match_parent"
         app:mcv_titleAnimationOrientation="horizontal"
         app:mcv_weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium" />
 

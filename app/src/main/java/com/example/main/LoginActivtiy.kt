@@ -28,8 +28,6 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
-    lateinit var sqldb: SQLiteDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -54,7 +52,6 @@ class LoginActivtiy : AppCompatActivity() {
             var idData = ""
             var pwData = ""
             var on = "On"
-            var add = false
 
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
@@ -63,23 +60,25 @@ class LoginActivtiy : AppCompatActivity() {
                 id = edtLoginId.text.toString()
                 pw = edtLoginPw.text.toString()
 
-                if (id == idData && pw == pwData) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    dbManager2 = DBManager2(this, "list", null, 1)
-                    sqldb = dbManager2.writableDatabase
-                    sqldb.execSQL("INSERT INTO list (id, secret) vales ($id, $on);")
-                    add = true
-                    //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
-                    startActivity(intent)
-                }
-            }
 
-            if(add == false) {
+            }
+            if (id == idData && pw == pwData) {
+                val intent = Intent(this, MainActivity::class.java)
+                dbManager2 = DBManager2(this, "list", null, 1)
+                sqlitedb = dbManager2.writableDatabase
+
+
+                sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'none')")
+                sqlitedb.close()
+                //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
+                startActivity(intent)
+
+            } else {
                 Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
             }
+
             cursor.close()
             sqlitedb.close()
-            sqldb.close()
         }
 
         btnToRegister.setOnClickListener {

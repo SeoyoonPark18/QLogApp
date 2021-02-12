@@ -2,20 +2,15 @@ package com.example.main.ui.calendar
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.content.ContentUris
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat.PNG
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,16 +19,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.main.DBManager2
 import com.example.main.NextCalActivity
 import com.example.main.R
 import com.example.main.dateDBManager
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import org.apache.commons.io.IOUtils
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.io.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 private const val REQUEST_MSG_CODE = 1
@@ -69,7 +62,7 @@ open class CalendarFragment : Fragment() {
         DBManager2 = DBManager2(activity, "list", null, 1)
         sqlDB = DBManager2.writableDatabase
 
-        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list;", null)
+        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date='${dateView.text}';", null)
         var row = cursor.count
         for (i in 0..row) {
             if (cursor.moveToNext()) {
@@ -144,7 +137,7 @@ open class CalendarFragment : Fragment() {
                 CalendarDay.today().month + "월 " +
                 CalendarDay.today().day + "일"
 
-        setData()
+        setData()//스크롤뷰 부분에 텍스트뷰와 이미지뷰 값을 설정
 
         writeDay = ArrayList()
 
@@ -165,13 +158,13 @@ open class CalendarFragment : Fragment() {
 
         DBManager2 = DBManager2(activity, "list", null, 1)
         sqlDB = DBManager2.readableDatabase
-        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date = '${dateView.text}';", null)
-        while (cursor.moveToNext()){
+        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date='${dateView.text}';", null)
+        while (cursor.moveToNext()) {
             id = cursor.getString(cursor.getColumnIndex("id"))
             emo = cursor.getString(cursor.getColumnIndex("emotion"))
         }
 
-        emotion = emo
+        emotion = emo // 감정 상태
 
         //일기 쓴 날짜를 달력에 표시
         calendarView.addDecorator(EventDecorator(Color.BLACK, writeDay))
@@ -208,15 +201,14 @@ open class CalendarFragment : Fragment() {
         }
 
         //다른 날짜를 눌렀을 때
-        calendarView.setOnDateChangedListener { widget, date, selected ->
-            dateView.text =
-                date.year.toString() + "년 " + date.month.toString() + "월 " + date.day.toString() + "일"
+        calendarView.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
 
-            if ((widget.selectedDate?.year.toString() + "년 " + widget.selectedDate?.month.toString() + "월 "+ widget.selectedDate?.day.toString() + "일")==dateView.text)
-                setData()
-        }
+        })
+
     }
 
+
+    //nextcalactivity에서 intent값을 받기 위해 오버라이딩
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_MSG_CODE) {

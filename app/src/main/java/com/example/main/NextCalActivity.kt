@@ -110,12 +110,12 @@ class NextCalActivity : AppCompatActivity() {
             var Date = ""
 
             if (id == dateId) {
-                que = "UPDATE list SET ques= 0 WHERE date='${dateTextView.text}';"
-                ans = "UPDATE list SET ans= 0 WHERE date='${dateTextView.text}';"
-                pho = "UPDATE list SET pic= 0 WHERE date='${dateTextView.text}';"
-                emo ="UPDATE list SET emotion = 0 WHERE date = '${dateTextView}';"
-                date = "UPDATE list SET date= 0 WHERE date = '${id}';'"
-                Date = "DELETE FROM dateDB WHERE date ='${dateTextView.text}';"
+                que = "UPDATE list SET ques= 0 WHERE date LIKE '${dateTextView.text}';"
+                ans = "UPDATE list SET ans= 0 WHERE date== LIKE '${dateTextView.text}';"
+                pho = "UPDATE list SET pic= 0 WHERE date == LIKE'${dateTextView.text}';"
+                emo ="UPDATE list SET emotion = 0 WHERE date LIKE '${dateTextView}';"
+                date = "UPDATE list SET date= 0 WHERE date LIKE '${id}';'"
+                Date = "DELETE FROM dateDB WHERE date LIKE'${dateTextView.text}';"
             }
 
             var intent = Intent()
