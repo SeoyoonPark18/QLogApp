@@ -1,6 +1,8 @@
 package com.example.main
 
 
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.ActionBar
@@ -14,6 +16,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     lateinit var ab: ActionBar
+
+    lateinit var DBManager2: DBManager2
+    lateinit var sqlDB: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +50,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
     }
     private fun setCurrentFragment(fragment: Fragment)=
             supportFragmentManager.beginTransaction().apply{

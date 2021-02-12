@@ -28,6 +28,8 @@ class LoginActivtiy : AppCompatActivity() {
     lateinit var dbManager2: DBManager2
     lateinit var sqlitedb: SQLiteDatabase
 
+    lateinit var sqldb: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -40,7 +42,8 @@ class LoginActivtiy : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         btnToRegister = findViewById(R.id.btnToRegister)
 
-        dbManager = DBManager(this, "registerDB", null, 1)
+        dbManager = DBManager(this, "register", null, 1)
+        dbManager2 = DBManager2(this, "list", null, 1)
 
         btnLogin.setOnClickListener {
             sqlitedb = dbManager.readableDatabase
@@ -52,6 +55,7 @@ class LoginActivtiy : AppCompatActivity() {
             var idData = ""
             var pwData = ""
             var on = "On"
+            var add = false
 
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
@@ -60,23 +64,19 @@ class LoginActivtiy : AppCompatActivity() {
                 id = edtLoginId.text.toString()
                 pw = edtLoginPw.text.toString()
 
-
+                if (id == idData && pw == pwData) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    sqldb = dbManager2.writableDatabase
+                    sqldb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
+                    add = true
+                    sqldb.close()
+                    startActivity(intent)
+                }
             }
-            if (id == idData && pw == pwData) {
-                val intent = Intent(this, MainActivity::class.java)
-                dbManager2 = DBManager2(this, "list", null, 1)
-                sqlitedb = dbManager2.writableDatabase
 
-
-                sqlitedb.execSQL("INSERT INTO list VALUES ('$idData', 'null', 'null', 'null', '$on', 'null', 'null', 'none')")
-                sqlitedb.close()
-                //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
-                startActivity(intent)
-
-            } else {
+            if(add == false) {
                 Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
             }
-
             cursor.close()
             sqlitedb.close()
         }
