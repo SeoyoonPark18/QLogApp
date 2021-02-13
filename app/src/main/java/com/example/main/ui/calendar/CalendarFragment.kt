@@ -53,7 +53,7 @@ open class CalendarFragment : Fragment() {
         var num: Int = 0
 
         var date = ""
-        var pic: ByteArray = byteArrayOf()
+        var pic: ByteArray = byteArrayOf(0)
 
         while (cursor.moveToNext()) { //커서로 이동하면서 date날짜를 가져와 textview에 출력
             date = cursor.getString(cursor.getColumnIndex("date"))
