@@ -63,26 +63,30 @@ open class CalendarFragment : Fragment() {
             layout_item.id = num
 
             var tvTextView: TextView = TextView(activity)
-            tvTextView.text = date
+            if (date != "null") { //작성한 것이 없다면 모아보기 부분에 표시되지 않음
+                tvTextView.text = date
+            }
             tvTextView.textSize = 25F
             if (num % 2 == 0) tvTextView.setBackgroundColor(Color.rgb(246, 189, 197))
             tvTextView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             tvTextView.setPadding(40, 30, 0, 30)
             tvTextView.gravity = LEFT
 
-            layout_item.addView(tvTextView)
+            //텍스트뷰의 텍스트가 비어있거나 없다면 layout에 추가하지 않음
+            if (tvTextView.text.isNullOrEmpty() == false) layout_item.addView(tvTextView)
 
+            //레이아웃에 있는 텍스트뷰를 눌렀을 때 해당 날짜의 데이터를 다음화면으로 넘김
             layout_item.setOnClickListener {
                 sqliteDB = DBManager2.readableDatabase
-                var recursor = sqliteDB.rawQuery("SELECT * FROM list WHERE date == '${tvTextView.text}'",null)
+                var recursor = sqliteDB.rawQuery("SELECT * FROM list WHERE date == '${tvTextView.text}'", null)
                 var ques = ""
                 var ans = ""
                 var emotion = ""
-                while (recursor.moveToNext()){
+                while (recursor.moveToNext()) {
                     ques = recursor.getString(cursor.getColumnIndex("ques"))
                     ans = recursor.getString(cursor.getColumnIndex("ans"))
                     emotion = recursor.getString(cursor.getColumnIndex("emotion"))
-                    if (recursor.getString(cursor.getColumnIndex("pic"))!=null)
+                    if (recursor.getString(cursor.getColumnIndex("pic")) != null)
                         pic = recursor.getBlob(cursor.getColumnIndex("pic"))
                 }
                 val intent = Intent(getActivity(), NextCalActivity::class.java)
@@ -94,7 +98,7 @@ open class CalendarFragment : Fragment() {
                 recursor.close()
                 sqliteDB.close()
                 startActivity(intent)
-                }
+            }
             layout.addView(layout_item)
             num++
         }

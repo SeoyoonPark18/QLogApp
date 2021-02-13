@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         setCurrentFragment(HomeFragment())
         setTitle("홈")
 
+        //메인 화면 아래의 네비게이션 바
         bottomNavigationView.setOnNavigationItemSelectedListener{
             when(it.itemId){
                 R.id.navigation_home-> {
@@ -50,7 +51,17 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        //현재 로그인한 사람의 아이디를 제외하고 로그인 상태를 off로 바꿈
+        var id = intent.getStringExtra("id")
+        DBManager2 = DBManager2(this, "list", null, 1)
+        sqlDB = DBManager2.writableDatabase
+
+        sqlDB.execSQL("UPDATE list SET logonoff = 'Off' WHERE id != '$id';")
+
+        sqlDB.close()
     }
+
     private fun setCurrentFragment(fragment: Fragment)=
             supportFragmentManager.beginTransaction().apply{
                 replace(R.id.flFragment,fragment)

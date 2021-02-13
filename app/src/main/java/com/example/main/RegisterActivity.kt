@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 
 class RegisterActivity : AppCompatActivity() {
@@ -50,6 +51,7 @@ class RegisterActivity : AppCompatActivity() {
             sqldb.close()
 
             val intent = Intent(this, LoginActivtiy::class.java)
+            Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
     }

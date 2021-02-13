@@ -59,17 +59,6 @@ class NextCalActivity : AppCompatActivity() {
         var pic = intent.getByteArrayExtra("pic")
         var emo = intent.getStringExtra("emotion")
 
-        /*cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date == '$date';", null)
-
-        while (cursor.moveToNext()) {
-            que = cursor.getString(cursor.getColumnIndex("ques"))
-            ans = cursor.getString(cursor.getColumnIndex("ans"))
-            day = cursor.getString(cursor.getColumnIndex("date"))
-            state = cursor.getString(cursor.getColumnIndex("logonoff"))
-            emo = cursor.getString(cursor.getColumnIndex("emotion"))
-            if (cursor.getBlob(cursor.getColumnIndex("pic")) != null)
-                pic = cursor.getBlob((cursor.getColumnIndex("pic")))
-        }*/
         dateTextView.text = date
         question.text = que
         answer.text = ans

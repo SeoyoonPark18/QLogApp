@@ -1,6 +1,7 @@
 package com.example.main
 
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
@@ -34,19 +35,23 @@ class UpdateSettings : AppCompatActivity() {
         edtNewPw = findViewById(R.id.edtNewPw)
         btnConfirmPw = findViewById(R.id.btnConfirmPw)
 
+        //해당하는 아이디를 찾아 이름 변경
         btnConfirmName.setOnClickListener {
             sqlDB = dbManager.writableDatabase
-            sqlDB.execSQL("UPDATE register SET name = " + edtNewName.text +" WHERE id = '"
-                    + edtExistId.text.toString() +"';")
+            sqlDB.execSQL("UPDATE register SET name = '${edtNewName.text}' WHERE id = '${edtExistId.text}';")
             sqlDB.close()
-            Toast.makeText(applicationContext, "수정됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "이름 변경 완료", Toast.LENGTH_SHORT).show()
         }
+
+        //해당하는 아이디를 찾아 비밀번호 변경->변경 후 로그인화면으로 전환
         btnConfirmPw.setOnClickListener {
             sqlDB = dbManager.writableDatabase
-            sqlDB.execSQL("UPDATE register SET pw = " + edtNewPw.text +" WHERE id = '"
+            sqlDB.execSQL("UPDATE register SET pw = '" + edtNewPw.text +"' WHERE id = '"
                     + edtExistId2.text.toString() +"';")
             sqlDB.close()
-            Toast.makeText(applicationContext, "수정됨", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "비밀번호가 변경되어 로그인 화면으로 넘어갑니다.", Toast.LENGTH_SHORT).show()
+            var intent = Intent(this, LoginActivtiy::class.java)
+            startActivity(intent)
         }
     }
 }

@@ -70,6 +70,7 @@ class LoginActivtiy : AppCompatActivity() {
                     sqldb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
                     add = true
                     sqldb.close()
+                    intent.putExtra("id", idData)
                     startActivity(intent)
                 }
             }
