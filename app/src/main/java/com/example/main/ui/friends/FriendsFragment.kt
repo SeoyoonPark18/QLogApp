@@ -31,12 +31,12 @@ class FriendsFragment : Fragment() {
     lateinit var sqlitedb: SQLiteDatabase
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         friendsViewModel =
-            ViewModelProvider(this).get(FriendsViewModel::class.java)
+                ViewModelProvider(this).get(FriendsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_friends, container, false)
         val sub = inflater.inflate(R.layout.dialog, container, false)
         setHasOptionsMenu(true)
