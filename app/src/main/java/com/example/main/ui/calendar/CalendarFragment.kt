@@ -1,6 +1,7 @@
 package com.example.main.ui.calendar
 
 
+import android.content.ContentUris
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -25,6 +26,7 @@ open class CalendarFragment : Fragment() {
     lateinit var layout: LinearLayout
 
     lateinit var sqlDB: SQLiteDatabase
+    lateinit var sqliteDB: SQLiteDatabase
     lateinit var DBManager2: DBManager2
 
 
@@ -51,8 +53,9 @@ open class CalendarFragment : Fragment() {
         var num: Int = 0
 
         var date = ""
+        var pic: ByteArray = byteArrayOf()
 
-        while (cursor.moveToNext()) {
+        while (cursor.moveToNext()) { //커서로 이동하면서 date날짜를 가져와 textview에 출력
             date = cursor.getString(cursor.getColumnIndex("date"))
 
             var layout_item: LinearLayout = LinearLayout(activity)
@@ -70,14 +73,31 @@ open class CalendarFragment : Fragment() {
             layout_item.addView(tvTextView)
 
             layout_item.setOnClickListener {
+                sqliteDB = DBManager2.readableDatabase
+                var recursor = sqliteDB.rawQuery("SELECT * FROM list WHERE date == '${tvTextView.text}'",null)
+                var ques = ""
+                var ans = ""
+                var emotion = ""
+                while (recursor.moveToNext()){
+                    ques = recursor.getString(cursor.getColumnIndex("ques"))
+                    ans = recursor.getString(cursor.getColumnIndex("ans"))
+                    emotion = recursor.getString(cursor.getColumnIndex("emotion"))
+                    if (recursor.getString(cursor.getColumnIndex("pic"))!=null)
+                        pic = recursor.getBlob(cursor.getColumnIndex("pic"))
+                }
                 val intent = Intent(getActivity(), NextCalActivity::class.java)
-                intent.putExtra("date", date)
+                intent.putExtra("date", tvTextView.text)
+                intent.putExtra("ques", ques)
+                intent.putExtra("ans", ans)
+                intent.putExtra("emotion", emotion)
+                intent.putExtra("pic", pic)
+                recursor.close()
+                sqliteDB.close()
                 startActivity(intent)
-            }
+                }
             layout.addView(layout_item)
             num++
         }
-
         cursor.close()
         sqlDB.close()
 

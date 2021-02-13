@@ -6,10 +6,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.widget.Constraints
 import androidx.fragment.app.FragmentActivity
@@ -34,6 +36,7 @@ class NextCalActivity : AppCompatActivity() {
 
     lateinit var date: String
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_next_cal)
@@ -50,25 +53,15 @@ class NextCalActivity : AppCompatActivity() {
         diaryImageView = findViewById(R.id.diaryImageView)
         emotion = findViewById(R.id.emotion)
 
-        dbManager2 = DBManager2(this, "list", null, 1)
-
         date = intent.getStringExtra("date").toString()
+        var que = intent.getStringExtra("ques")
+        var ans = intent.getStringExtra("ans")
+        var pic = intent.getByteArrayExtra("pic")
+        var emo = intent.getStringExtra("emotion")
 
-        dateTextView.text = date
+        /*cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date == '$date';", null)
 
-        sqlDB = dbManager2.readableDatabase
-
-        var state = ""
-        var que = ""
-        var ans = ""
-        var pic: ByteArray = byteArrayOf()
-        var picBit: Bitmap
-        var day = ""
-        var emo = ""
-        var add = false
-
-        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date == '$date';", null)
-        while (cursor.moveToNext() && add==false) {
+        while (cursor.moveToNext()) {
             que = cursor.getString(cursor.getColumnIndex("ques"))
             ans = cursor.getString(cursor.getColumnIndex("ans"))
             day = cursor.getString(cursor.getColumnIndex("date"))
@@ -76,39 +69,22 @@ class NextCalActivity : AppCompatActivity() {
             emo = cursor.getString(cursor.getColumnIndex("emotion"))
             if (cursor.getBlob(cursor.getColumnIndex("pic")) != null)
                 pic = cursor.getBlob((cursor.getColumnIndex("pic")))
-            if (dateTextView.text == day) {
-                add = true
-                break
-            }
-        }
-
-        if (dateTextView.text == day && state == "On") {
-            question.text = que
-
-            if (ans.isNullOrBlank()) {
-                answer.visibility = View.GONE
-            } else {
-                answer.text = ans
-            }
-
-            if (pic.none()) {
-                diaryImageView.visibility = View.GONE
-            } else {
-                picBit = BitmapFactory.decodeByteArray(pic, 0, pic.size)
-                diaryImageView.setImageBitmap(picBit)
-            }
-        } else if (date != dateTextView.text) {
-            question.visibility = View.GONE
-            question.text = ""
+        }*/
+        dateTextView.text = date
+        question.text = que
+        answer.text = ans
+        if (ans.isNullOrBlank()) {
             answer.visibility = View.GONE
-            answer.text = ""
-            diaryImageView.visibility = View.GONE
         }
 
-        cursor.close()
-        sqlDB.close()
+        if (pic?.isNotEmpty() == true) {
+            var picBit: Bitmap = BitmapFactory.decodeByteArray(pic, 0, pic!!.size)
+            diaryImageView.setImageBitmap(picBit)
+        }
 
-        //emotion database
+        diaryImageView.visibility = View.GONE
+
+        //emotion부분에 가져오는 값에 따라 나타나는 이미지가 다름
         when (emo) {
             "Happy" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_satisfied_24)
             "Good" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
@@ -118,17 +94,20 @@ class NextCalActivity : AppCompatActivity() {
         }
 
         closeButton.setOnClickListener {
-            onBackPressed()
+            //이전화면으로 이동
+            finishAndRemoveTask()
         }
 
         deleteButton.setOnClickListener {
             //해당 날짜 내용 삭제
+
             sqlDB = dbManager2.writableDatabase
 
             sqlDB.execSQL( "DELETE FROM list WHERE date ='"+dateTextView.text+"' AND logonoff ='On';")
 
 
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+            sqlDB.close()
             finish()
         }
     }
