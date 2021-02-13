@@ -66,12 +66,10 @@ class NextCalActivity : AppCompatActivity() {
             answer.visibility = View.GONE
         }
 
-        if (pic?.isNotEmpty() == true) {
-            var picBit: Bitmap = BitmapFactory.decodeByteArray(pic, 0, pic!!.size)
-            diaryImageView.setImageBitmap(picBit)
-        }
+        var picBit: Bitmap = BitmapFactory.decodeByteArray(pic, 0, pic!!.size)
+        diaryImageView.setImageBitmap(picBit)
 
-        diaryImageView.visibility = View.GONE
+        if (pic.isEmpty()==true) diaryImageView.visibility = View.GONE
 
         //emotion부분에 가져오는 값에 따라 나타나는 이미지가 다름
         when (emo) {

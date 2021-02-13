@@ -125,7 +125,7 @@ class FriendsFragment : Fragment() {
 
             if (id == nameData) {
                 name = cursor.getString(0)
-                dbManager = DBManager(activity, "friendDB", null, 1)
+                dbManager = DBManager(activity, "friend", null, 1)
 
                 //friendDB에 추가했던 친구 이름 삭제하기
                 sqlitedb = dbManager.writableDatabase
@@ -147,7 +147,7 @@ class FriendsFragment : Fragment() {
 
     // 추가된 친구 목록 보여주는 함수
     fun show_friend() {
-        dbManager = DBManager(activity, "friendDB", null, 1)
+        dbManager = DBManager(activity, "friend", null, 1)
         sqlitedb = dbManager.readableDatabase
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
@@ -196,7 +196,7 @@ class FriendsFragment : Fragment() {
 
     // 친구가 선택됐을 때 친구의 id 값을 얻어오는 함수
     fun change_id(int: Int): String {
-        dbManager = DBManager(activity, "friendDB", null, 1)
+        dbManager = DBManager(activity, "friend", null, 1)
         sqlitedb = dbManager.readableDatabase
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)

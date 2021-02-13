@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import java.util.*
 
 
 class LoginActivtiy : AppCompatActivity() {
@@ -53,6 +54,14 @@ class LoginActivtiy : AppCompatActivity() {
 
             cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
 
+            val cal = Calendar.getInstance()
+
+            val year = cal.get(Calendar.YEAR).toString()
+            val month = (cal.get(Calendar.MONTH)+1).toString()
+            val day = cal.get(Calendar.DATE).toString()
+
+            var date = "$year" + "년 " + "$month" + "월 " + "$day" + "일"
+
             var idData = ""
             var pwData = ""
             var add = false
@@ -68,12 +77,23 @@ class LoginActivtiy : AppCompatActivity() {
                 if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
 
+                    var date2 = ""
                     //답변 정보 정장위한 list 데이터베이스 삽입
                     sqldb = dbManager2.writableDatabase
-                    sqldb.execSQL("UPDATE list SET logonoff='On' WHERE id='$idData';")
+                    var licursor: Cursor = sqldb.rawQuery("SELECT * FROM list WHERE date != '$date';", null)
+                    while (licursor.moveToNext()){
+                        date2 = licursor.getString(licursor.getColumnIndex("date"))
+                    }
+                    if (date2 == null){
+                        sqldb.execSQL("INSERT INTO list (id, ques, ans, date, logonoff, emotion, secret) VALUES ('$idData', 'null', 'null', '$date', 'On', 'null', 'null')")
+
+                    } else {
+                        sqldb.execSQL("UPDATE list SET logonoff = 'On' WHERE id=='$idData';")
+                    }
+                    sqldb.execSQL("UPDATE list SET logonoff = 'Off' WHERE id!='$idData';")
                     add = true
                     sqldb.close()
-                    intent.putExtra("id", idData)
+                    //intent.putExtra("id", idData)
                     startActivity(intent)
                 }
             }

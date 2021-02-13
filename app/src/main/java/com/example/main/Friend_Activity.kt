@@ -39,17 +39,13 @@ class Friend_Activity : AppCompatActivity()  {
         dbManager = DBManager(this, "list", null, 1)
         sqlitedb = dbManager.readableDatabase
 
-        var check = false
         var cursor: Cursor
-
-        //list 데이터베이스에서 해당하는 id를 찾아서 데이터를 가져옴
         cursor = sqlitedb.rawQuery("SELECT * FROM list WHERE id = '" + str_id + "';", null)
 
         if( cursor.moveToNext()) {
             str_date = cursor.getString(cursor.getColumnIndex("date")).toString()
             str_question = cursor.getString(cursor.getColumnIndex("ques")).toString()
             str_answer = cursor.getString(cursor.getColumnIndex("ans")).toString()
-            check = true
         }
 
         if(cursor.getString(cursor.getColumnIndex("date")).toString() == "null") {

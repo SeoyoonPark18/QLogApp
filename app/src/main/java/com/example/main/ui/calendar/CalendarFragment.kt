@@ -88,7 +88,7 @@ open class CalendarFragment : Fragment() {
                     ques = recursor.getString(cursor.getColumnIndex("ques"))
                     ans = recursor.getString(cursor.getColumnIndex("ans"))
                     emotion = recursor.getString(cursor.getColumnIndex("emotion"))
-                    if (recursor.getBlob(cursor.getColumnIndex("pic")) != null)
+                    if (recursor.getBlob(cursor.getColumnIndex("pic")).isNotEmpty())
                         pic = recursor.getBlob(cursor.getColumnIndex("pic"))
                 }
                 val intent = Intent(getActivity(), NextCalActivity::class.java)

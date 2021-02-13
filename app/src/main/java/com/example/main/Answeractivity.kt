@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
+import java.util.*
 
 class Answeractivity : AppCompatActivity() {
     lateinit var ques: TextView // 질문
@@ -116,8 +117,8 @@ class Answeractivity : AppCompatActivity() {
         var onf = ""
 
         while (cursor.moveToNext()) {
-            onf = cursor.getString(4)
-            idData = cursor.getString(0)
+            onf = cursor.getString(cursor.getColumnIndex("logonoff"))
+            idData = cursor.getString(cursor.getColumnIndex("id"))
         }
 
         if (onf == on) { // 로그인 상태인 회원 찾아 값 저장
@@ -125,12 +126,12 @@ class Answeractivity : AppCompatActivity() {
 
             sqlitedb = dbManager2.writableDatabase
 
-            sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
-            var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=?;")
+            sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData' AND date = '$date';")
+            sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData' AND date = '$date';")
+            sqlitedb.execSQL("UPDATE list SET logonoff = '$on' WHERE id = '$idData' AND date = '$date'")
+            sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData' AND date = '$date';")
+            sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData'; AND date = '$date'")
+            var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=? AND date = '$date';")
             p.bindBlob(1, picbyte)
             p.bindString(2, idData)
             p.execute()
