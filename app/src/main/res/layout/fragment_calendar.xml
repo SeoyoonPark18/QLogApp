@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,103 +10,20 @@
     android:overScrollMode="ifContentScrolls"
     tools:context=".ui.calendar.CalendarFragment">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        app:mcv_calendarMode="month"
-        app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:mcv_firstDayOfWeek="sunday"
-        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
-        app:mcv_selectionColor="@color/blue"
-        app:mcv_selectionMode="single"
-        app:mcv_showOtherDates="defaults"
-        app:mcv_tileHeight="match_parent"
-        app:mcv_tileSize="match_parent"
-        app:mcv_titleAnimationOrientation="horizontal"
-        app:mcv_weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/pink"
-        android:orientation="vertical">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical" />
+    </ScrollView>
 
-            <TextView
-                android:id="@+id/dateView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-            <ImageButton
-                android:id="@+id/expansionButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:background="#00FFFFFF"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_baseline_zoom_in_24" />
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/scrollText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/pink"
-            android:overScrollMode="ifContentScrolls"
-            android:verticalScrollbarPosition="defaultPosition"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendar_grid">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/questionView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:layout_editor_absoluteY="338dp" />
-
-                <TextView
-                    android:id="@+id/answerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    tools:layout_editor_absoluteX="154dp"
-                    tools:layout_editor_absoluteY="476dp" />
-
-                <ImageView
-                    android:id="@+id/diaryImage"
-                    android:layout_width="375dp"
-                    android:layout_height="375dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="10dp"
-                    android:maxWidth="390dp"
-                    android:maxHeight="390dp"
-                    android:src="?attr/selectableItemBackground" />
-
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

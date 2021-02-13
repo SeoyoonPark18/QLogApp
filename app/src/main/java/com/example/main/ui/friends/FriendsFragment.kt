@@ -1,18 +1,15 @@
 package com.example.main.ui.friends
 
-import android.annotation.SuppressLint
+
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.drm.DrmStore
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.core.view.marginRight
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.*
@@ -71,7 +68,7 @@ class FriendsFragment : Fragment() {
 
     // 친구의 id를 입력 받고 존재하는 id라면 추가, 없는 id라면 추가 x
     fun check_id_add() {
-        dbManager = DBManager(activity, "registerDB", null, 1)
+        dbManager = DBManager(activity, "register", null, 1)
 
         sqlitedb = dbManager.readableDatabase
 
@@ -90,7 +87,7 @@ class FriendsFragment : Fragment() {
 
             if (id == idData) {
                 nameData = cursor.getString(0)
-                dbManager = DBManager(activity, "friendDB", null, 1)
+                dbManager = DBManager(activity, "friend", null, 1)
 
                 //friendDB에 추가한 친구 이름 넣기
                 sqlitedb = dbManager.writableDatabase
@@ -110,7 +107,7 @@ class FriendsFragment : Fragment() {
     }
 
     fun check_id_del() {
-        dbManager = DBManager(activity, "registerDB", null, 1)
+        dbManager = DBManager(activity, "register", null, 1)
 
         sqlitedb = dbManager.readableDatabase
 

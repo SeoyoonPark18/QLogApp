@@ -6,10 +6,12 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.widget.Constraints
 import androidx.fragment.app.FragmentActivity
@@ -29,11 +31,12 @@ class NextCalActivity : AppCompatActivity() {
     lateinit var actionBar: ActionBar
 
     lateinit var sqlDB: SQLiteDatabase
-    lateinit var datesql: SQLiteDatabase
 
     lateinit var dbManager2: DBManager2
-    lateinit var dateDBManager: dateDBManager
 
+    lateinit var date: String
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_next_cal)
@@ -50,90 +53,50 @@ class NextCalActivity : AppCompatActivity() {
         diaryImageView = findViewById(R.id.diaryImageView)
         emotion = findViewById(R.id.emotion)
 
-        dbManager2 = DBManager2(this, "list", null, 1)
-        dateDBManager = dateDBManager(this, "dateDB", null, 1)
+        date = intent.getStringExtra("date").toString()
+        var que = intent.getStringExtra("ques")
+        var ans = intent.getStringExtra("ans")
+        var pic = intent.getByteArrayExtra("pic")
+        var emo = intent.getStringExtra("emotion")
 
-        dateTextView.text = intent.getStringExtra("KEY_DATE")
-        question.text = intent.getStringExtra("KEY_QUESTION")
-        answer.text = intent.getStringExtra("KEY_ANSWER")
-        var emo = intent.getStringExtra("KEY_EMO")
-        var date = intent.getStringExtra("DATE")
-        var id = intent.getStringExtra("ID")
-        var dateId = intent.getStringExtra("DATEID")
-        intent.extras!!
-        val byteArray: ByteArray = intent.getByteArrayExtra("KEY_IMAGE")!!
-        val bitmap: Bitmap
-
-        if(byteArray.isNotEmpty()) {
-            bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            diaryImageView.setImageBitmap(bitmap)
-        } else {
-            diaryImageView.visibility = View.GONE
-        }
-
-        if (answer.text.isNullOrBlank()){
+        dateTextView.text = date
+        question.text = que
+        answer.text = ans
+        if (ans.isNullOrBlank()) {
             answer.visibility = View.GONE
         }
 
-        //emotion database
-        when(emo){
-                "Happy" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_satisfied_24)
-                "Good" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
-                "Soso" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_neutral_24)
-                "Bad" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
-                else -> emotion.visibility = View.GONE
+        if (pic?.isNotEmpty() == true) {
+            var picBit: Bitmap = BitmapFactory.decodeByteArray(pic, 0, pic!!.size)
+            diaryImageView.setImageBitmap(picBit)
+        }
+
+        diaryImageView.visibility = View.GONE
+
+        //emotion부분에 가져오는 값에 따라 나타나는 이미지가 다름
+        when (emo) {
+            "Happy" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_satisfied_24)
+            "Good" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_satisfied_alt_24)
+            "Soso" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_neutral_24)
+            "Bad" -> emotion.setImageResource(R.drawable.ic_baseline_sentiment_very_dissatisfied_24)
+            else -> emotion.visibility = View.GONE
         }
 
         closeButton.setOnClickListener {
-            onBackPressed()
+            //이전화면으로 이동
+            finishAndRemoveTask()
         }
 
         deleteButton.setOnClickListener {
             //해당 날짜 내용 삭제
-            var year = 0
-            var month = 0
-            var day = 0
 
-            datesql = dateDBManager.readableDatabase
-            var cursor:Cursor = datesql.rawQuery("SELECT * FROM dateDB WHERE date='{${dateTextView.text}';", null)
-            while (cursor.moveToNext()){
-                year = cursor.getInt(cursor.getColumnIndex("year"))
-                month = cursor.getInt(cursor.getColumnIndex("month"))
-                day = cursor.getInt(cursor.getColumnIndex("day"))
-            }
+            sqlDB = dbManager2.writableDatabase
 
-            var que = ""
-            var ans = ""
-            var pho = ""
-            var emo = ""
-            var date = ""
-            var Date = ""
+            sqlDB.execSQL( "DELETE FROM list WHERE date ='"+dateTextView.text+"' AND logonoff ='On';")
 
-            if (id == dateId) {
-                que = "UPDATE list SET ques= 0 WHERE date='${dateTextView.text}';"
-                ans = "UPDATE list SET ans= 0 WHERE date='${dateTextView.text}';"
-                pho = "UPDATE list SET pic= 0 WHERE date='${dateTextView.text}';"
-                emo ="UPDATE list SET emotion = 0 WHERE date = '${dateTextView}';"
-                date = "UPDATE list SET date= 0 WHERE date = '${id}';'"
-                Date = "DELETE FROM dateDB WHERE date ='${dateTextView.text}';"
-            }
-
-            var intent = Intent()
-            intent.putExtra("que", que)
-            intent.putExtra("ans", ans)
-            intent.putExtra("pho", pho)
-            intent.putExtra("emo", emo)
-            intent.putExtra("date", date)
-            intent.putExtra("date", Date)
-            intent.putExtra("year", year)
-            intent.putExtra("month", month)
-            intent.putExtra("day", day)
 
             Toast.makeText(this, "삭제되었습니다", Toast.LENGTH_SHORT).show()
-
-            datesql.close()
-
-            setResult(RESULT_OK, intent)
+            sqlDB.close()
             finish()
         }
     }

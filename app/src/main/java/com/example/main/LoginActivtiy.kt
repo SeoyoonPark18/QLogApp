@@ -42,8 +42,10 @@ class LoginActivtiy : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         btnToRegister = findViewById(R.id.btnToRegister)
 
-        dbManager = DBManager(this, "registerDB", null, 1)
+        dbManager = DBManager(this, "register", null, 1)
+        dbManager2 = DBManager2(this, "list", null, 1)
 
+        //회원가입 데이터 조회하여 로그인
         btnLogin.setOnClickListener {
             sqlitedb = dbManager.readableDatabase
 
@@ -53,9 +55,9 @@ class LoginActivtiy : AppCompatActivity() {
 
             var idData = ""
             var pwData = ""
-            var on = "On"
             var add = false
 
+            //이동한 cursor가 id, pw 정보와 동일하면 로그인 성공 & 홈 화면으로 이동
             while (cursor.moveToNext()) {
                 idData = cursor.getString(1)
                 pwData = cursor.getString(2)
@@ -65,24 +67,26 @@ class LoginActivtiy : AppCompatActivity() {
 
                 if (id == idData && pw == pwData) {
                     val intent = Intent(this, MainActivity::class.java)
-                    dbManager2 = DBManager2(this, "list", null, 1)
+
+                    //답변 정보 정장위한 list 데이터베이스 삽입
                     sqldb = dbManager2.writableDatabase
-                    //sqldb.execSQL("INSERT INTO list (id, logonoff) values ($id, $on);")
-                    sqldb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
+                    sqldb.execSQL("UPDATE list SET logonoff='On' WHERE id='$idData';")
                     add = true
-                    //id text, ques text, ans text, date text, logonoff text, emotion text, secret text
+                    sqldb.close()
+                    intent.putExtra("id", idData)
                     startActivity(intent)
                 }
             }
 
+            //로그인 실패 시 경고문구
             if(add == false) {
                 Toast.makeText(this, "아이디 또는 비밀번호가 맞지 않습니다", Toast.LENGTH_SHORT).show()
             }
             cursor.close()
             sqlitedb.close()
-            sqldb.close()
         }
 
+        // 회원가입 화면으로 이동
         btnToRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)

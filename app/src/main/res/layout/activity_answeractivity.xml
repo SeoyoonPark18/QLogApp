@@ -53,11 +53,11 @@
                     android:padding="5dp"
                     android:scaleX="1.5"
                     android:scaleY="1.5"
-                    android:src="@drawable/ic_baseline_camera_alt_24"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/ic_baseline_camera_alt_24" />
+                    tools:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
 
                 <ImageButton
                     android:id="@+id/emotionButton1"

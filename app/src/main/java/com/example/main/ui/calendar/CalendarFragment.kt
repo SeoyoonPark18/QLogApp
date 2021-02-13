@@ -1,263 +1,111 @@
 package com.example.main.ui.calendar
 
-import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
+
 import android.content.ContentUris
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat.PNG
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
+import android.view.Gravity.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.main.DBManager2
 import com.example.main.NextCalActivity
 import com.example.main.R
-import com.example.main.dateDBManager
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import org.apache.commons.io.IOUtils
-import java.io.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 private const val REQUEST_MSG_CODE = 1
 
 open class CalendarFragment : Fragment() {
 
     private lateinit var calendarViewModel: CalendarViewModel
-    lateinit var expansionButton: ImageButton
-    lateinit var scrollText: ScrollView
-    lateinit var calendarView: MaterialCalendarView
-    lateinit var dateView: TextView
-    lateinit var questionTextView: TextView
-    lateinit var answerTextView: TextView
-    lateinit var imageView: ImageView
-
-    lateinit var id: String
-    lateinit var dateId: String
-    lateinit var date: String
-    lateinit var writeDay: ArrayList<CalendarDay>
+    lateinit var layout: LinearLayout
 
     lateinit var sqlDB: SQLiteDatabase
-    lateinit var datesql: SQLiteDatabase
-    lateinit var dateDBManager: dateDBManager
+    lateinit var sqliteDB: SQLiteDatabase
     lateinit var DBManager2: DBManager2
 
-    fun setData() {
-        var state = ""
-        var que = ""
-        var ans = ""
-        var pic: ByteArray = byteArrayOf()
-        var picBit: Bitmap
-
-        DBManager2 = DBManager2(activity, "list", null, 1)
-        sqlDB = DBManager2.writableDatabase
-
-        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list;", null)
-        var row = cursor.count
-        for (i in 0..row) {
-            if (cursor.moveToNext()) {
-                que = cursor.getString(cursor.getColumnIndex("ques"))
-                ans = cursor.getString(cursor.getColumnIndex("ans"))
-                date = cursor.getString(cursor.getColumnIndex("date"))
-                state = cursor.getString(cursor.getColumnIndex("logonoff"))
-                pic = cursor.getBlob(cursor.getColumnIndex("pic"))
-            }
-            if (dateView.text == date && state == "On") break
-        }
-
-        if (dateView.text == date && state == "On") {
-            questionTextView.text = que
-
-            if (ans.isNullOrBlank()) {
-                answerTextView.visibility = View.GONE
-            } else {
-                answerTextView.text = ans
-            }
-
-            if (pic.none()) {
-                imageView.visibility = View.GONE
-            } else {
-                picBit = BitmapFactory.decodeByteArray(pic, 0, pic.size)
-                imageView.setImageBitmap(picBit)
-            }
-        } else if (date != dateView.text) {
-            questionTextView.visibility = View.GONE
-            questionTextView.text = ""
-            answerTextView.visibility = View.GONE
-            answerTextView.text = ""
-            imageView.visibility = View.GONE
-        }
-        cursor.close()
-        sqlDB.close()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        calendarViewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+        calendarViewModel =
+                ViewModelProvider(this).get(CalendarViewModel::class.java)
+        val root =  inflater.inflate(R.layout.fragment_calendar, container, false)
+        layout = root.findViewById(R.id.dateText)
+        showDate()
+        return root
     }
 
-
-    @SuppressLint("WrongThread")
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        expansionButton = view.findViewById(R.id.expansionButton)
-        scrollText = view.findViewById(R.id.scrollText)
-        calendarView = view.findViewById(R.id.calendarView)
-        dateView = view.findViewById(R.id.dateView)
-        questionTextView = view.findViewById(R.id.questionView)
-        answerTextView = view.findViewById(R.id.answerView)
-        imageView = view.findViewById(R.id.diaryImage)
-
-        calendarView.setSelectedDate(CalendarDay.today())
-
-        var year = 0
-        var month = 0
-        var day = 0
-
-        var emotion = ""
-        var emo = ""
-
-        dateView.text = CalendarDay.today().year.toString() + "년 " +
-                CalendarDay.today().month + "월 " +
-                CalendarDay.today().day + "일"
-
-        setData()
-
-        writeDay = ArrayList()
-
-        //일기를 쓴 날짜 가져오기
-        dateDBManager = dateDBManager(activity, "dateDB", null, 1)
-        datesql = dateDBManager.readableDatabase
-
-        var datecursor: Cursor = datesql.rawQuery("SELECT * FROM dateDB", null)
-        while (datecursor.moveToNext()) {
-            dateId = datecursor.getString(datecursor.getColumnIndex("id"))
-            year = datecursor.getInt(datecursor.getColumnIndex("year"))
-            month = datecursor.getInt(datecursor.getColumnIndex("month"))
-            day = datecursor.getInt(datecursor.getColumnIndex("day"))
-            if (year != null && (month <= 12 && month >= 1) && (day >= 1 && day <= 31)) {
-                writeDay.add(CalendarDay.from(year, month, day))
-            }
-        }
-
+    //textview와 imageview를 동적할당하여 데이터베이스에 있는 일자를 표시
+    fun showDate() {
         DBManager2 = DBManager2(activity, "list", null, 1)
         sqlDB = DBManager2.readableDatabase
-        var cursor: Cursor = sqlDB.rawQuery("SELECT * FROM list WHERE date = '${dateView.text}';", null)
-        while (cursor.moveToNext()){
-            id = cursor.getString(cursor.getColumnIndex("id"))
-            emo = cursor.getString(cursor.getColumnIndex("emotion"))
-        }
 
-        emotion = emo
+        var cursor: Cursor
+        cursor = sqlDB.rawQuery("SELECT * FROM list WHERE logonoff =='On';", null)
+        var num: Int = 0
 
-        //일기 쓴 날짜를 달력에 표시
-        calendarView.addDecorator(EventDecorator(Color.BLACK, writeDay))
+        var date = ""
+        var pic: ByteArray = byteArrayOf()
 
-        datecursor.close()
-        datesql.close()
+        while (cursor.moveToNext()) { //커서로 이동하면서 date날짜를 가져와 textview에 출력
+            date = cursor.getString(cursor.getColumnIndex("date"))
 
-        //NextCalActivity로 이미지를 넘기기
-        val stream = ByteArrayOutputStream()
-        if (imageView.drawable != null) {
-            val bitmap: Bitmap = imageView.drawable.toBitmap(300, 300)
-            val scale: Float = 700 / bitmap.width.toFloat()
-            val image_w: Int = (bitmap.width * scale).toInt()
-            val image_h: Int = (bitmap.height * scale).toInt()
-            val resize: Bitmap = Bitmap.createScaledBitmap(bitmap, image_w, image_h, true)
-            resize.compress(PNG, 20, stream)
-        } else {
-            imageView.visibility = View.GONE
-        }
-        val byteArray: ByteArray = stream.toByteArray()
+            var layout_item: LinearLayout = LinearLayout(activity)
+            layout_item.orientation = LinearLayout.HORIZONTAL
+            layout_item.id = num
 
-        //확대버튼
-        expansionButton.setOnClickListener {
-            val intent = Intent(activity, NextCalActivity::class.java)
-            intent.putExtra("KEY_DATE", dateView.text)
-            intent.putExtra("KEY_QUESTION", questionTextView.text)
-            intent.putExtra("KEY_ANSWER", answerTextView.text)
-            intent.putExtra("KEY_IMAGE", byteArray)
-            intent.putExtra("KEY_EMO", emotion)
-            intent.putExtra("DATE", date)
-            intent.putExtra("ID", id)
-            intent.putExtra("DATEID", dateId)
-            activity?.startActivityForResult(intent, REQUEST_MSG_CODE)
-        }
-
-        //다른 날짜를 눌렀을 때
-        calendarView.setOnDateChangedListener { widget, date, selected ->
-            dateView.text =
-                date.year.toString() + "년 " + date.month.toString() + "월 " + date.day.toString() + "일"
-
-            if ((widget.selectedDate?.year.toString() + "년 " + widget.selectedDate?.month.toString() + "월 "+ widget.selectedDate?.day.toString() + "일")==dateView.text)
-                setData()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_MSG_CODE) {
-            if (resultCode == RESULT_OK) {
-                var que = data?.getStringExtra("que")
-                var ans = data?.getStringExtra("ans")
-                var pic = data?.getStringExtra("pho")
-                var emo = data?.getStringExtra("emo")
-                var date = data?.getStringExtra("date")
-                var Date = data?.getStringExtra("Date")
-                var year = data?.getStringExtra("year")?.toInt()
-                var month = data?.getStringExtra("month")?.toInt()
-                var day = data?.getStringExtra("day")?.toInt()
-                writeDay.removeAll(listOf(CalendarDay.from(year!!, month!!, day!!)))
-
-                DBManager2 = DBManager2(activity, "list",  null, 1)
-                sqlDB = DBManager2.writableDatabase
-
-                sqlDB.rawQuery(que, null)
-                sqlDB.rawQuery(ans, null)
-                sqlDB.rawQuery(pic, null)
-                sqlDB.rawQuery(emo, null)
-                sqlDB.rawQuery(date, null)
-
-                sqlDB.close()
-
-                dateDBManager = dateDBManager(activity, "dateDB", null, 1)
-                datesql = dateDBManager.writableDatabase
-
-                datesql.rawQuery("$Date", null)
-
-                datesql.close()
-
-                questionTextView.text = ""
-                questionTextView.visibility = View.GONE
-                answerTextView.text = ""
-                answerTextView.visibility = View.GONE
-
-                imageView.setImageDrawable(null)
-                imageView.visibility = View.GONE
+            var tvTextView: TextView = TextView(activity)
+            if (date != "null") { //작성한 것이 없다면 모아보기 부분에 표시되지 않음
+                tvTextView.text = date
             }
+            tvTextView.textSize = 25F
+            tvTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_edit_24, 0, R.drawable.ic_baseline_keyboard_arrow_right_24, 0)
+            tvTextView.compoundDrawablePadding = 30
+            if (num % 2 == 0) tvTextView.setBackgroundColor(Color.rgb(246, 189, 197))
+            tvTextView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            tvTextView.setPadding(40, 30, 0, 30)
+            tvTextView.gravity = LEFT
+
+            //텍스트뷰의 텍스트가 비어있거나 없다면 layout에 추가하지 않음
+            if (tvTextView.text.isNullOrEmpty() == false) layout_item.addView(tvTextView)
+
+            //레이아웃에 있는 텍스트뷰를 눌렀을 때 해당 날짜의 데이터를 다음화면으로 넘김
+            layout_item.setOnClickListener {
+                sqliteDB = DBManager2.readableDatabase
+                var recursor = sqliteDB.rawQuery("SELECT * FROM list WHERE date == '${tvTextView.text}'", null)
+                var ques = ""
+                var ans = ""
+                var emotion = ""
+                while (recursor.moveToNext()) {
+                    ques = recursor.getString(cursor.getColumnIndex("ques"))
+                    ans = recursor.getString(cursor.getColumnIndex("ans"))
+                    emotion = recursor.getString(cursor.getColumnIndex("emotion"))
+                    if (recursor.getBlob(cursor.getColumnIndex("pic")) != null)
+                        pic = recursor.getBlob(cursor.getColumnIndex("pic"))
+                }
+                val intent = Intent(getActivity(), NextCalActivity::class.java)
+                intent.putExtra("date", tvTextView.text)
+                intent.putExtra("ques", ques)
+                intent.putExtra("ans", ans)
+                intent.putExtra("emotion", emotion)
+                intent.putExtra("pic", pic)
+                recursor.close()
+                sqliteDB.close()
+                startActivity(intent)
+            }
+            layout.addView(layout_item)
+            num++
         }
+        cursor.close()
+        sqlDB.close()
+
     }
 }

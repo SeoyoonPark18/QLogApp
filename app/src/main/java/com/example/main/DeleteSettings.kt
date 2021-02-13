@@ -1,6 +1,7 @@
 package com.example.main
 
 import android.content.Intent
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,22 +17,33 @@ class DeleteSettings : AppCompatActivity() {
     lateinit var dbManager: DBManager
     lateinit var sqlDB: SQLiteDatabase
 
+    lateinit var dbManager2: DBManager2
+    lateinit var sqliteDB: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_delete_settings)
 
         dbManager = DBManager(this, "register", null, 1)
+        dbManager2 = DBManager2(this, "list", null, 1)
 
         edtExistId = findViewById(R.id.edtExistId)
         btnConfirmDelete = findViewById(R.id.btnConfirmDelete)
 
+        //아이디 확인 후 데이터 삭제
         btnConfirmDelete.setOnClickListener {
             sqlDB = dbManager.writableDatabase
-            sqlDB.execSQL("DELETE FROM register WHERE id = '" + edtExistId.text.toString() +"';")
-            sqlDB.close()
+            sqliteDB = dbManager2.writableDatabase
 
+            sqlDB.execSQL("DELETE FROM register WHERE id ='${edtExistId.text}';")
+            sqliteDB.execSQL("DELETE FROM list WHERE id ='${edtExistId}';")
+
+            Toast.makeText(this, "회원탈퇴가 되었습니다", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LoginActivtiy::class.java)
             startActivity(intent)
+
+            sqlDB.close()
+            sqliteDB.close()
         }
     }
 }

@@ -26,7 +26,6 @@
         </activity>
         <activity android:name=".RegisterActivity" />
 
-        <activity android:name=".DeleteSettings"></activity>
         <activity
             android:name=".Answeractivity"
             android:label="@string/title_activity_answeractivity"
@@ -44,6 +43,9 @@
             android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".Friend_Activity"/>
+        <activity
+            android:name=".DeleteSettings"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

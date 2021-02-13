@@ -40,14 +40,17 @@ class SettingsFragment : Fragment() {
         btnDelete = view.findViewById(R.id.btnDelete)
         btnVersion = view.findViewById(R.id.btnVersion)
 
+        //회원 정보 수정 클릭 시
         btnUpdate.setOnClickListener {
             val intent = Intent(getActivity(), UpdateSettings::class.java)
             startActivity(intent)
         }
+        //회원 탈퇴 클릭 시
         btnDelete.setOnClickListener {
             var builder = AlertDialog.Builder(getActivity())
             builder.setTitle("회원 탈퇴")
             builder.setMessage("정말로 탈퇴하시겠습니까?")
+            //확인 클릭 시, listener를 통해 탈퇴 화면으로 이동
             var listener = object :DialogInterface.OnClickListener{
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     val intent = Intent(getActivity(), DeleteSettings::class.java)
@@ -58,6 +61,7 @@ class SettingsFragment : Fragment() {
             builder.setNegativeButton("취소", null)
             builder.show()
         }
+        //버전 정보 클릭 시
         btnVersion.setOnClickListener {
             var builder = AlertDialog.Builder(getActivity())
             builder.setTitle("버전 정보")

@@ -40,7 +40,6 @@ class Answeractivity : AppCompatActivity() {
     lateinit var photo: ImageView // 사진을 출력할 뷰
 
     lateinit var dbManager2: DBManager2 // 데이터베이스 매니저
-    lateinit var dateDBManager: dateDBManager
     lateinit var sqlitedb: SQLiteDatabase
 
     lateinit var date: String // 날짜, 감정, 공개/비공개, 사진 변수
@@ -124,23 +123,17 @@ class Answeractivity : AppCompatActivity() {
         if (onf == on) { // 로그인 상태인 회원 찾아 값 저장
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
 
-            dateDBManager = dateDBManager(this, "dateDB", null, 1)
             sqlitedb = dbManager2.writableDatabase
-            var dateSQL : SQLiteDatabase = dateDBManager.readableDatabase
 
             sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET date='$date' WHERE id='$idData';")
-            sqlitedb.execSQL("UPDATE list SET logonoff='$on' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData';")
             sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData';")
             var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=?;")
             p.bindBlob(1, picbyte)
             p.bindString(2, idData)
             p.execute()
-
-            dateSQL.execSQL("INSERT INTO dateDB VALUES ('$idData', '$date','$year', '$month', '$day')")
-            dateSQL.close()
 
             var intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
