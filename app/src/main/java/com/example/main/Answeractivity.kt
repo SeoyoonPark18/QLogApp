@@ -140,6 +140,7 @@ class Answeractivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
         cursor.close()
         sqlitedb.close()
     }
