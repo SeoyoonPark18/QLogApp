@@ -215,8 +215,8 @@ class Answeractivity : AppCompatActivity() {
             var height = bitmap.height*350/bitmap.width
             if (bitmap.width > 400) {
                 bitmap = Bitmap.createScaledBitmap(bitmap, width, height,true)
-                bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream)
             }
+            bitmap.compress(Bitmap.CompressFormat.PNG, 20, stream)
             picbyte = stream.toByteArray()
         }
         else{
