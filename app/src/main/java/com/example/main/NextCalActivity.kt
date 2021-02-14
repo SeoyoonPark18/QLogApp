@@ -42,15 +42,14 @@ class NextCalActivity : AppCompatActivity() {
         setContentView(R.layout.activity_next_cal)
 
         actionBar = supportActionBar!!
-
         actionBar.hide()
 
-        closeButton = findViewById(R.id.closeButton)
-        deleteButton = findViewById(R.id.deleteButton)
-        dateTextView = findViewById(R.id.dateText)
-        question = findViewById(R.id.qTextView)
-        answer = findViewById(R.id.aTextView)
-        diaryImageView = findViewById(R.id.diaryImageView)
+        closeButton = findViewById(R.id.closeButton) //이전화면으로 돌아가는 버튼
+        deleteButton = findViewById(R.id.deleteButton) //해당 데이터를 삭제하는 버튼
+        dateTextView = findViewById(R.id.dateText) //상단에 날짜를 표시
+        question = findViewById(R.id.qTextView) //데이터베이스에서 저장해놓은 해당 날짜 질문
+        answer = findViewById(R.id.aTextView) //데이터베이스에서 저장해놓은 해당 날짜 답변
+        diaryImageView = findViewById(R.id.diaryImageView) //데이터베이스에서 저장해놓은 해당 날짜 이미지
         emotion = findViewById(R.id.emotion)
 
         date = intent.getStringExtra("date").toString()
@@ -66,7 +65,7 @@ class NextCalActivity : AppCompatActivity() {
             answer.visibility = View.GONE
         }
 
-
+        //사진이 있다면 사진을 표시, 없다면 이미지 뷰를 안 보이게 함
         if (pic!!.size > 1){
             var picBit: Bitmap = BitmapFactory.decodeByteArray(pic, 0, pic.size)
             diaryImageView.setImageBitmap(picBit)
@@ -83,14 +82,13 @@ class NextCalActivity : AppCompatActivity() {
             else -> emotion.visibility = View.GONE
         }
 
+        //이전화면으로 이동
         closeButton.setOnClickListener {
-            //이전화면으로 이동
             finishAndRemoveTask()
         }
 
+        //해당 날짜 내용 삭제
         deleteButton.setOnClickListener {
-            //해당 날짜 내용 삭제
-
             sqlDB = dbManager2.writableDatabase
 
             sqlDB.execSQL( "DELETE FROM list WHERE date ='"+dateTextView.text+"' AND logonoff ='On';")

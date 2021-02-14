@@ -43,19 +43,20 @@ open class CalendarFragment : Fragment() {
         return root
     }
 
-    //textview와 imageview를 동적할당하여 데이터베이스에 있는 일자를 표시
+    //텍스트뷰를 동적 생성-> 데이터베이스에 있는 일자를 표시
     fun showDate() {
         DBManager2 = DBManager2(activity, "list", null, 1)
         sqlDB = DBManager2.readableDatabase
 
         var cursor: Cursor
+        //로그인 상태가 on인 데이터만 가져옴
         cursor = sqlDB.rawQuery("SELECT * FROM list WHERE logonoff =='On';", null)
         var num: Int = 0
 
-        var date = ""
-        var pic: ByteArray = byteArrayOf(0)
+        var date = "" //날짜
+        var pic: ByteArray = byteArrayOf(0) //사진
 
-        while (cursor.moveToNext()) { //커서로 이동하면서 date날짜를 가져와 textview에 출력
+        while (cursor.moveToNext()) { //커서로 이동하면서 날짜를 가져와 textview에 출력
             date = cursor.getString(cursor.getColumnIndex("date"))
 
             var layout_item: LinearLayout = LinearLayout(activity)
@@ -81,14 +82,14 @@ open class CalendarFragment : Fragment() {
             layout_item.setOnClickListener {
                 sqliteDB = DBManager2.readableDatabase
                 var recursor = sqliteDB.rawQuery("SELECT * FROM list WHERE date == '${tvTextView.text}'", null)
-                var ques = ""
-                var ans = ""
-                var emotion = ""
+                var ques = "" // 질문
+                var ans = "" // 답변
+                var emotion = "" // 감정
                 while (recursor.moveToNext()) {
                     ques = recursor.getString(cursor.getColumnIndex("ques"))
                     ans = recursor.getString(cursor.getColumnIndex("ans"))
                     emotion = recursor.getString(cursor.getColumnIndex("emotion"))
-                    if (recursor.getBlob(cursor.getColumnIndex("pic")).isNotEmpty())
+                    if (recursor.getBlob(cursor.getColumnIndex("pic")).isNotEmpty()) //사진이 없다면 가져오지 않음
                         pic = recursor.getBlob(cursor.getColumnIndex("pic"))
                 }
                 val intent = Intent(getActivity(), NextCalActivity::class.java)

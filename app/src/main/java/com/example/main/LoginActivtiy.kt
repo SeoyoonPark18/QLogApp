@@ -78,12 +78,13 @@ class LoginActivtiy : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
 
                     var date2 = ""
-                    //답변 정보 정장위한 list 데이터베이스 삽입
+                    //답변 정보 저장->list 데이터베이스 삽입
                     sqldb = dbManager2.writableDatabase
                     var licursor: Cursor = sqldb.rawQuery("SELECT * FROM list WHERE date =='$date';", null)
                     while (licursor.moveToNext()){
                         date2 = licursor.getString(licursor.getColumnIndex("date"))
                     }
+                    //해당하는 날짜의 내용이 없다면 데이터 추가, 있다면 로그인 상태만 변경
                     if (date2.isNullOrBlank()){
                         sqldb.execSQL("INSERT INTO list (id, date, logonoff) VALUES ('$idData', '$date', 'On');")
 

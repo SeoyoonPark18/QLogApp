@@ -108,11 +108,10 @@ class Answeractivity : AppCompatActivity() {
         // 해당 id와 동일한 튜플 찾은 후 질문, 답변, 날짜 저장
         dbManager2 = DBManager2(this, "list", null, 1)
 
-        sqlitedb = dbManager2.readableDatabase
+        sqlitedb = dbManager2.writableDatabase
         var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM list;", null)
+        cursor = sqlitedb.rawQuery("SELECT * FROM list WHERE logonoff == 'On';", null)
 
-        var on = "On"
         var idData = ""
         var onf = ""
 
@@ -121,14 +120,11 @@ class Answeractivity : AppCompatActivity() {
             idData = cursor.getString(cursor.getColumnIndex("id"))
         }
 
-        if (onf == on) { // 로그인 상태인 회원 찾아 값 저장
+        if (onf == "On") { // 로그인 상태인 회원 찾아 값 저장
             Toast.makeText(this, "저장됨", Toast.LENGTH_SHORT).show()
-
-            sqlitedb = dbManager2.writableDatabase
 
             sqlitedb.execSQL("UPDATE list SET ques='${ques.text}' WHERE id='$idData' AND date = '$date';")
             sqlitedb.execSQL("UPDATE list SET ans='${answer.text}' WHERE id='$idData' AND date = '$date';")
-            sqlitedb.execSQL("UPDATE list SET logonoff = '$on' WHERE id = '$idData' AND date = '$date'")
             sqlitedb.execSQL("UPDATE list SET emotion='$emotion' WHERE id='$idData' AND date = '$date';")
             sqlitedb.execSQL("UPDATE list SET secret='$secret' WHERE id='$idData'; AND date = '$date'")
             var p: SQLiteStatement = sqlitedb.compileStatement("UPDATE list SET pic = ? WHERE id=? AND date = '$date';")
