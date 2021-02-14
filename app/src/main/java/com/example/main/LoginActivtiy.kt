@@ -80,12 +80,12 @@ class LoginActivtiy : AppCompatActivity() {
                     var date2 = ""
                     //답변 정보 정장위한 list 데이터베이스 삽입
                     sqldb = dbManager2.writableDatabase
-                    var licursor: Cursor = sqldb.rawQuery("SELECT * FROM list WHERE date != '$date';", null)
+                    var licursor: Cursor = sqldb.rawQuery("SELECT * FROM list WHERE date =='$date';", null)
                     while (licursor.moveToNext()){
                         date2 = licursor.getString(licursor.getColumnIndex("date"))
                     }
-                    if (date2 == null){
-                        sqldb.execSQL("INSERT INTO list (id, ques, ans, date, logonoff, emotion, secret) VALUES ('$idData', 'null', 'null', '$date', 'On', 'null', 'null')")
+                    if (date2.isNullOrBlank()){
+                        sqldb.execSQL("INSERT INTO list (id, date, logonoff) VALUES ('$idData', '$date', 'On');")
 
                     } else {
                         sqldb.execSQL("UPDATE list SET logonoff = 'On' WHERE id=='$idData';")
