@@ -30,6 +30,9 @@ class FriendsFragment : Fragment() {
     lateinit var dbManager: DBManager
     lateinit var sqlitedb: SQLiteDatabase
 
+    lateinit var dbManager2: DBManager2
+    lateinit var sqldb: SQLiteDatabase
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -69,29 +72,39 @@ class FriendsFragment : Fragment() {
     // 친구의 id를 입력 받고 존재하는 id라면 추가, 없는 id라면 추가 x
     fun check_id_add() {
         dbManager = DBManager(activity, "register", null, 1)
+        dbManager2 = DBManager2(activity, "list", null, 1)
 
         sqlitedb = dbManager.readableDatabase
+        sqldb = dbManager2.readableDatabase
+
+        var cur_id = ""
+
+        var licursor: Cursor
+        licursor = sqldb.rawQuery("SELECT * FROM list WHERE logonoff=='On';", null)
+        while (licursor.moveToNext()){
+            cur_id = licursor.getString(licursor.getColumnIndex("id"))
+        }
 
         var cursor: Cursor
         cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
 
-        var idData: String = ""
+        var fr_idData: String = ""
         var nameData: String = ""
         var add = false
 
         while (cursor.moveToNext()) {
-            idData = cursor.getString(1)
+            fr_idData = cursor.getString(1)
 
             id = friend_id.text.toString()
 
 
-            if (id == idData) {
+            if (id == fr_idData) {
                 nameData = cursor.getString(0)
                 dbManager = DBManager(activity, "friend", null, 1)
 
                 //friendDB에 추가한 친구 이름 넣기
                 sqlitedb = dbManager.writableDatabase
-                sqlitedb.execSQL("INSERT INTO register VALUES ('$nameData','$id','null')")
+                sqlitedb.execSQL("INSERT INTO friend VALUES ('$nameData','$id','$cur_id');")
                 sqlitedb.close()
                 layout.removeAllViews()
                 show_friend()
@@ -107,12 +120,12 @@ class FriendsFragment : Fragment() {
     }
 
     fun check_id_del() {
-        dbManager = DBManager(activity, "register", null, 1)
+        dbManager = DBManager(activity, "friend", null, 1)
 
         sqlitedb = dbManager.readableDatabase
 
         var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+        cursor = sqlitedb.rawQuery("SELECT * FROM friend;", null)
 
         var name: String = ""
         var nameData: String = ""
@@ -130,7 +143,7 @@ class FriendsFragment : Fragment() {
                 //friendDB에 추가했던 친구 이름 삭제하기
                 sqlitedb = dbManager.writableDatabase
 
-                sqlitedb.execSQL("DELETE FROM register WHERE name = '$nameData';")
+                sqlitedb.execSQL("DELETE FROM friend WHERE name = '$nameData';")
                 sqlitedb.close()
                 layout.removeAllViews()
                 show_friend()
@@ -147,15 +160,24 @@ class FriendsFragment : Fragment() {
 
     // 추가된 친구 목록 보여주는 함수
     fun show_friend() {
+        dbManager2 = DBManager2(activity, "list", null, 1)
         dbManager = DBManager(activity, "friend", null, 1)
+        sqldb = dbManager2.readableDatabase
         sqlitedb = dbManager.readableDatabase
+
+        var cur_id=""
+
+        var licursor: Cursor
+        licursor = sqldb.rawQuery("SELECT * FROM list WHERE logonoff=='On';", null)
+        while (licursor.moveToNext()){
+            cur_id = licursor.getString(licursor.getColumnIndex("id"))
+        }
         var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+        cursor = sqlitedb.rawQuery("SELECT * FROM friend WHERE id == '$cur_id';", null)
         var num: Int = 0
 
         while (cursor.moveToNext()) {
-            var nameData = cursor.getString(0)
-            //id = cursor.getString(1)
+            var nameData = cursor.getString(cursor.getColumnIndex("name"))
 
             var layout_item: LinearLayout = LinearLayout(activity)
             layout_item.orientation = LinearLayout.HORIZONTAL
@@ -199,13 +221,13 @@ class FriendsFragment : Fragment() {
         dbManager = DBManager(activity, "friend", null, 1)
         sqlitedb = dbManager.readableDatabase
         var cursor: Cursor
-        cursor = sqlitedb.rawQuery("SELECT * FROM register;", null)
+        cursor = sqlitedb.rawQuery("SELECT * FROM friend;", null)
         var count: Int = 0
         var s_id = ""
 
         while (cursor.moveToNext()) {
             if(int == count) {
-                s_id = cursor.getString(1)
+                s_id = cursor.getString(0)
                 break
             }
             count++

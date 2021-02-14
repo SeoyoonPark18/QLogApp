@@ -14,6 +14,7 @@ class DBManager(
     override fun onCreate(db: SQLiteDatabase?) {
 
         db!!.execSQL("CREATE TABLE register (name text, id text PRIMARY KEY, pw text)")
+        db!!.execSQL("CREATE TABLE friend(name text, frid text, id text)")
 
     }
 
