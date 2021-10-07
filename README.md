@@ -1,4 +1,5 @@
 # QLogApp
+GURU2 안드로이드 해커톤
 ![1](https://user-images.githubusercontent.com/78526611/134572104-14833fd0-a9f2-482a-bfd7-317605532ee3.png)
 ![2](https://user-images.githubusercontent.com/78526611/134572204-806be4a8-934e-48e6-b2b2-f7151135572e.png)
 ![3](https://user-images.githubusercontent.com/78526611/134572209-553f8895-02e1-48d4-9696-f6be582edb17.png)
